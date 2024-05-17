@@ -1,0 +1,3 @@
+[submodule "doc"]
+	path = doc
+	url = http://twoadcode:3000/brian_li/SGS.HN.Labeler.wiki.git
