@@ -6,4 +6,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="DTO\Info\" />
+    <Folder Include="DTO\ResultModel\" />
+    <Folder Include="Interface\" />
+    <Folder Include="Implement\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SGS.HN.Repository\SGS.HN.Labeler.Repository.csproj" />
+  </ItemGroup>
+
 </Project>
