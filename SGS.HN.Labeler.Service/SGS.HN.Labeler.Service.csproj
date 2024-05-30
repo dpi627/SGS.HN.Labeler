@@ -8,8 +8,6 @@
 
   <ItemGroup>
     <Folder Include="DTO\Info\" />
-    <Folder Include="DTO\ResultModel\" />
-    <Folder Include="Interface\" />
     <Folder Include="Implement\" />
   </ItemGroup>
 
