@@ -1,4 +1,5 @@
-﻿namespace SGS.HN.Labeler
+﻿
+namespace SGS.HN.Labeler
 {
     partial class frmMain
     {
@@ -28,11 +29,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             tabMain = new TabControl();
             tabPrint = new TabPage();
+            txtOutputMessage = new TextBox();
+            labAutoPrint = new Label();
+            radPrintOnce = new RadioButton();
+            radioButton1 = new RadioButton();
+            btnPrint = new Button();
             txtOrderNoEnd = new TextBox();
             txtOrderNoStart = new TextBox();
             labOrderNo = new Label();
@@ -48,11 +54,6 @@
             ConfigPath = new DataGridViewTextBoxColumn();
             statusBarMain = new StatusStrip();
             progressBarMain = new ProgressBar();
-            radPrintOnce = new RadioButton();
-            radioButton1 = new RadioButton();
-            btnPrint = new Button();
-            labAutoPrint = new Label();
-            txtOutputMessage = new TextBox();
             tabMain.SuspendLayout();
             tabPrint.SuspendLayout();
             tabConfig.SuspendLayout();
@@ -90,6 +91,59 @@
             tabPrint.TabIndex = 1;
             tabPrint.Text = "標籤列印";
             tabPrint.UseVisualStyleBackColor = true;
+            // 
+            // txtOutputMessage
+            // 
+            txtOutputMessage.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            txtOutputMessage.Font = new Font("Microsoft JhengHei UI", 8F);
+            txtOutputMessage.Location = new Point(13, 98);
+            txtOutputMessage.Multiline = true;
+            txtOutputMessage.Name = "txtOutputMessage";
+            txtOutputMessage.ReadOnly = true;
+            txtOutputMessage.ScrollBars = ScrollBars.Vertical;
+            txtOutputMessage.Size = new Size(490, 331);
+            txtOutputMessage.TabIndex = 10;
+            // 
+            // labAutoPrint
+            // 
+            labAutoPrint.AutoSize = true;
+            labAutoPrint.Location = new Point(47, 75);
+            labAutoPrint.Name = "labAutoPrint";
+            labAutoPrint.Size = new Size(55, 15);
+            labAutoPrint.TabIndex = 9;
+            labAutoPrint.Text = "自動列印";
+            // 
+            // radPrintOnce
+            // 
+            radPrintOnce.AutoSize = true;
+            radPrintOnce.Location = new Point(108, 73);
+            radPrintOnce.Name = "radPrintOnce";
+            radPrintOnce.Size = new Size(49, 19);
+            radPrintOnce.TabIndex = 0;
+            radPrintOnce.TabStop = true;
+            radPrintOnce.Text = "單張";
+            radPrintOnce.UseVisualStyleBackColor = true;
+            // 
+            // radioButton1
+            // 
+            radioButton1.AutoSize = true;
+            radioButton1.Location = new Point(163, 73);
+            radioButton1.Name = "radioButton1";
+            radioButton1.Size = new Size(49, 19);
+            radioButton1.TabIndex = 1;
+            radioButton1.TabStop = true;
+            radioButton1.Text = "連續";
+            radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // btnPrint
+            // 
+            btnPrint.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnPrint.Location = new Point(428, 71);
+            btnPrint.Name = "btnPrint";
+            btnPrint.Size = new Size(75, 23);
+            btnPrint.TabIndex = 8;
+            btnPrint.Text = "列印";
+            btnPrint.UseVisualStyleBackColor = true;
             // 
             // txtOrderNoEnd
             // 
@@ -159,6 +213,7 @@
             btnDelete.TabIndex = 4;
             btnDelete.Text = "刪除";
             btnDelete.UseVisualStyleBackColor = true;
+            btnDelete.Click += btnDelete_Click;
             // 
             // btnSetToDefault
             // 
@@ -169,6 +224,7 @@
             btnSetToDefault.TabIndex = 3;
             btnSetToDefault.Text = "設定為預設";
             btnSetToDefault.UseVisualStyleBackColor = true;
+            btnSetToDefault.Click += btnSetToDefault_Click;
             // 
             // btnImport
             // 
@@ -179,42 +235,43 @@
             btnImport.TabIndex = 2;
             btnImport.Text = "匯入";
             btnImport.UseVisualStyleBackColor = true;
+            btnImport.Click += btnImport_Click;
             // 
             // dgvConfig
             // 
             dgvConfig.AllowUserToAddRows = false;
             dgvConfig.AllowUserToDeleteRows = false;
             dgvConfig.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Microsoft JhengHei UI", 9F);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dgvConfig.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Microsoft JhengHei UI", 9F);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvConfig.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvConfig.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvConfig.Columns.AddRange(new DataGridViewColumn[] { IsDeafult, ConfigName, ConfigPath });
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = SystemColors.Window;
-            dataGridViewCellStyle5.Font = new Font("Microsoft JhengHei UI", 9F);
-            dataGridViewCellStyle5.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
-            dgvConfig.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Window;
+            dataGridViewCellStyle2.Font = new Font("Microsoft JhengHei UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            dgvConfig.DefaultCellStyle = dataGridViewCellStyle2;
             dgvConfig.Location = new Point(13, 13);
             dgvConfig.Margin = new Padding(3, 3, 3, 10);
             dgvConfig.Name = "dgvConfig";
             dgvConfig.ReadOnly = true;
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = SystemColors.Control;
-            dataGridViewCellStyle6.Font = new Font("Microsoft JhengHei UI", 9F);
-            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
-            dgvConfig.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Microsoft JhengHei UI", 9F);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dgvConfig.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dgvConfig.RowHeadersVisible = false;
             dgvConfig.Size = new Size(490, 380);
             dgvConfig.TabIndex = 1;
@@ -257,59 +314,6 @@
             progressBarMain.TabIndex = 2;
             progressBarMain.Value = 100;
             // 
-            // radPrintOnce
-            // 
-            radPrintOnce.AutoSize = true;
-            radPrintOnce.Location = new Point(108, 73);
-            radPrintOnce.Name = "radPrintOnce";
-            radPrintOnce.Size = new Size(49, 19);
-            radPrintOnce.TabIndex = 0;
-            radPrintOnce.TabStop = true;
-            radPrintOnce.Text = "單張";
-            radPrintOnce.UseVisualStyleBackColor = true;
-            // 
-            // radioButton1
-            // 
-            radioButton1.AutoSize = true;
-            radioButton1.Location = new Point(163, 73);
-            radioButton1.Name = "radioButton1";
-            radioButton1.Size = new Size(49, 19);
-            radioButton1.TabIndex = 1;
-            radioButton1.TabStop = true;
-            radioButton1.Text = "連續";
-            radioButton1.UseVisualStyleBackColor = true;
-            // 
-            // btnPrint
-            // 
-            btnPrint.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnPrint.Location = new Point(428, 71);
-            btnPrint.Name = "btnPrint";
-            btnPrint.Size = new Size(75, 23);
-            btnPrint.TabIndex = 8;
-            btnPrint.Text = "列印";
-            btnPrint.UseVisualStyleBackColor = true;
-            // 
-            // labAutoPrint
-            // 
-            labAutoPrint.AutoSize = true;
-            labAutoPrint.Location = new Point(47, 75);
-            labAutoPrint.Name = "labAutoPrint";
-            labAutoPrint.Size = new Size(55, 15);
-            labAutoPrint.TabIndex = 9;
-            labAutoPrint.Text = "自動列印";
-            // 
-            // txtOutputMessage
-            // 
-            txtOutputMessage.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            txtOutputMessage.Font = new Font("Microsoft JhengHei UI", 8F);
-            txtOutputMessage.Location = new Point(13, 98);
-            txtOutputMessage.Multiline = true;
-            txtOutputMessage.Name = "txtOutputMessage";
-            txtOutputMessage.ReadOnly = true;
-            txtOutputMessage.ScrollBars = ScrollBars.Vertical;
-            txtOutputMessage.Size = new Size(490, 331);
-            txtOutputMessage.TabIndex = 10;
-            // 
             // frmMain
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -330,7 +334,6 @@
             ResumeLayout(false);
             PerformLayout();
         }
-
         #endregion
 
         private TabControl tabMain;

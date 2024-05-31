@@ -1,17 +1,28 @@
-namespace SGS.HN.Labeler
+using Microsoft.Extensions.DependencyInjection;
+using SGS.HN.Labeler.Extension;
+
+namespace SGS.HN.Labeler;
+
+internal static class Program
 {
-    internal static class Program
+    /// <summary>
+    ///  The main entry point for the application.
+    /// </summary>
+    [STAThread]
+    static void Main()
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
-        {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
-            ApplicationConfiguration.Initialize();
-            Application.Run(new frmMain());
-        }
+        ApplicationConfiguration.Initialize();
+
+        // 建立 DI 容器，註冊服務
+        IServiceCollection? services = new ServiceCollection()
+            .AddServices()
+            .AddRepositories()
+            .AddForms()
+            .AddMiscs();
+
+        using ServiceProvider? serviceProvider = services.BuildServiceProvider();
+        frmMain? form = serviceProvider.GetOrCreateService<frmMain>();
+
+        Application.Run(form);
     }
 }
