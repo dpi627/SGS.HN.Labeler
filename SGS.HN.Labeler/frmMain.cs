@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using SGS.HN.Labeler.Service.DTO.ResultModel;
 using SGS.HN.Labeler.Service.Interface;
 
@@ -5,16 +6,22 @@ namespace SGS.HN.Labeler
 {
     public partial class frmMain : Form
     {
+        private readonly ILogger _logger;
         private readonly IExcelConfigService _excelConfig;
 
-        public frmMain(IExcelConfigService excelConfig)
+        public frmMain(
+            ILogger<frmMain> logger,
+            IExcelConfigService excelConfig
+            )
         {
             InitializeComponent();
+            this._logger = logger;
             this._excelConfig = excelConfig;
         }
 
         private void btnImport_Click(object sender, EventArgs e)
         {
+            _logger.LogInformation("Import Click");
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 Filter = "Excel Files|*.xlsx",

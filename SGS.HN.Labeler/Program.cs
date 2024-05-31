@@ -20,7 +20,6 @@ internal static class Program
 
         try
         {
-            throw new NotImplementedException();
             ApplicationConfiguration.Initialize();
 
             // 建立 DI 容器，註冊服務
