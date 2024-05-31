@@ -3,9 +3,7 @@
     /// <summary>
     /// 回傳處理結果
     /// </summary>
-    public record ResultModel
+    public record ResultModel(bool IsSuccess = true, string? Message = null)
     {
-        public bool IsSuccess { get; set; }
-        public string? Message { get; set; }
     }
 }

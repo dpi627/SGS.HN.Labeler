@@ -11,4 +11,8 @@
     <ProjectReference Include="..\SGS.HN.Labeler.Service\SGS.HN.Labeler.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ExcelConfig\" />
+  </ItemGroup>
+
 </Project>
