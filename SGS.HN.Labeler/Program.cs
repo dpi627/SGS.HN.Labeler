@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using SGS.HN.Labeler.Extension;
+using Serilog;
 
 namespace SGS.HN.Labeler;
 
@@ -11,18 +12,36 @@ internal static class Program
     [STAThread]
     static void Main()
     {
-        ApplicationConfiguration.Initialize();
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.Debug()
+            .CreateLogger();
 
-        // 建立 DI 容器，註冊服務
-        IServiceCollection? services = new ServiceCollection()
-            .AddServices()
-            .AddRepositories()
-            .AddForms()
-            .AddMiscs();
+        try
+        {
+            throw new NotImplementedException();
+            ApplicationConfiguration.Initialize();
 
-        using ServiceProvider? serviceProvider = services.BuildServiceProvider();
-        frmMain? form = serviceProvider.GetOrCreateService<frmMain>();
+            // 建立 DI 容器，註冊服務
+            IServiceCollection? services = new ServiceCollection()
+                .AddServices()
+                .AddRepositories()
+                .AddForms()
+                .AddMiscs();
 
-        Application.Run(form);
+            using ServiceProvider? serviceProvider = services.BuildServiceProvider();
+            frmMain? form = serviceProvider.GetOrCreateService<frmMain>();
+
+            Application.Run(form);
+        }
+        catch (Exception ex)
+        {
+            Log.Fatal(ex, "Application start-up failed");
+            MessageBox.Show(ex.Message);
+        }
+        finally
+        {
+            Log.CloseAndFlush();
+        }
     }
 }
