@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGS.HN.Labeler.ConsoleApp", "SGS.HN.Labeler.Console\SGS.HN.Labeler.ConsoleApp.csproj", "{551BA77A-88B0-471A-846F-F34AFFA6BD21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SGS.HN.Labeler.ConsoleApp", "SGS.HN.Labeler.Console\SGS.HN.Labeler.ConsoleApp.csproj", "{551BA77A-88B0-471A-846F-F34AFFA6BD21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGS.HN.Labeler.Service", "SGS.HN.Labeler.Service\SGS.HN.Labeler.Service.csproj", "{F383DF01-B675-426F-B714-D4682EAC4C23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SGS.HN.Labeler.Service", "SGS.HN.Labeler.Service\SGS.HN.Labeler.Service.csproj", "{F383DF01-B675-426F-B714-D4682EAC4C23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGS.HN.Labeler.Repository", "SGS.HN.Repository\SGS.HN.Labeler.Repository.csproj", "{553E0E29-751A-4925-BA43-E641DE6B2439}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SGS.HN.Labeler.Repository", "SGS.HN.Repository\SGS.HN.Labeler.Repository.csproj", "{553E0E29-751A-4925-BA43-E641DE6B2439}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGS.HN.Util", "SGS.HN.Util\SGS.HN.Util.csproj", "{E73FE279-2932-45DC-A588-8595DBBDFEFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SGS.HN.Util", "SGS.HN.Util\SGS.HN.Util.csproj", "{E73FE279-2932-45DC-A588-8595DBBDFEFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGS.HN.Labeler", "SGS.HN.Labeler\SGS.HN.Labeler.csproj", "{36D749C6-2CB3-40E2-B61A-E46C94A050D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{E73FE279-2932-45DC-A588-8595DBBDFEFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E73FE279-2932-45DC-A588-8595DBBDFEFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E73FE279-2932-45DC-A588-8595DBBDFEFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36D749C6-2CB3-40E2-B61A-E46C94A050D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36D749C6-2CB3-40E2-B61A-E46C94A050D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36D749C6-2CB3-40E2-B61A-E46C94A050D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36D749C6-2CB3-40E2-B61A-E46C94A050D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
