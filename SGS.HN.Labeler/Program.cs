@@ -15,6 +15,7 @@ internal static class Program
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
             .WriteTo.Debug()
+            .WriteTo.Seq(serverUrl: "http://twtpeoad002:5341")
             .CreateLogger();
 
         try
