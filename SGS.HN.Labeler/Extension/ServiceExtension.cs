@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using SGS.HN.Labeler.Service.Implement;
 using SGS.HN.Labeler.Service.Interface;
 
@@ -36,6 +37,13 @@ namespace SGS.HN.Labeler.Extension
         public static IServiceCollection AddMiscs(this IServiceCollection services)
         {
             services.AddSingleton<IServiceProvider>(services.BuildServiceProvider());
+
+            // 註冊 Serilog
+            services.AddLogging(builder =>
+            {
+                builder.AddSerilog();
+            });
+
             return services;
         }
 
