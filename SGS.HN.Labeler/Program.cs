@@ -6,9 +6,6 @@ namespace SGS.HN.Labeler;
 
 internal static class Program
 {
-    /// <summary>
-    ///  The main entry point for the application.
-    /// </summary>
     [STAThread]
     static void Main()
     {
@@ -22,7 +19,6 @@ internal static class Program
         {
             ApplicationConfiguration.Initialize();
 
-            // 建立 DI 容器，註冊服務
             IServiceCollection? services = new ServiceCollection()
                 .AddServices()
                 .AddRepositories()

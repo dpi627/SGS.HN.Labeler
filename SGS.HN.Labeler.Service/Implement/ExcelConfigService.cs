@@ -1,38 +1,47 @@
-﻿namespace SGS.HN.Labeler.Service.Implement
+﻿namespace SGS.HN.Labeler.Service.Implement;
+
+public class ExcelConfigService : IExcelConfigService
 {
-    public class ExcelConfigService : IExcelConfigService
+    public IEnumerable<ExcelConfigResultModel> GetList(string directoryPath)
     {
-        public IEnumerable<ExcelConfigResultModel> GetList(string directoryPath)
-        {
-            IEnumerable<ExcelConfigResultModel>? files = Directory
-                .GetFiles(directoryPath, "*.xlsx")
-                .Select(filePath => new ExcelConfigResultModel
-                {
-                    ConfigName = Path.GetFileNameWithoutExtension(filePath),
-                    ConfigPath = filePath
-                });
-            return files;
-        }
-
-        public ResultModel Import(string sourcePath, string targetPath)
-        {
-            try
+        IEnumerable<ExcelConfigResultModel>? files = Directory
+            .GetFiles(directoryPath, "*.xlsx")
+            .Select(filePath => new ExcelConfigResultModel
             {
-                File.Copy(sourcePath, targetPath, true);
-            }
-            catch (Exception ex)
-            {
-                return new ResultModel(
-                    IsSuccess:false,
-                    Message:ex.Message
-                    );
-            }
-            return new ResultModel();
-        }
+                ConfigName = Path.GetFileNameWithoutExtension(filePath),
+                ConfigPath = filePath
+            });
+        return files;
+    }
 
-        public IEnumerable<PrintInfoResultModel> Load(string filePath)
+    public ResultModel Import(ExcelConfigImportInfo info)
+    {
+        return Import(info.SourcePath, info.TargetPath);
+    }
+
+    public ResultModel Import(string sourcePath, string targetPath)
+    {
+        try
         {
-            throw new NotImplementedException();
+            string targetDirectory = Path.GetDirectoryName(targetPath);
+            if (!Directory.Exists(targetDirectory))
+            {
+                Directory.CreateDirectory(targetDirectory);
+            }
+            File.Copy(sourcePath, targetPath, true);
         }
+        catch (Exception ex)
+        {
+            return new ResultModel(
+                IsSuccess: false,
+                Message: ex.Message
+            );
+        }
+        return new ResultModel();
+    }
+
+    public IEnumerable<PrintInfoResultModel> Load(string filePath)
+    {
+        throw new NotImplementedException();
     }
 }
