@@ -42,7 +42,7 @@ namespace SGS.HN.Labeler
             txtOrderNoEnd = new TextBox();
             txtOrderNoStart = new TextBox();
             labOrderNo = new Label();
-            comboBox1 = new ComboBox();
+            cbbExcelConfig = new ComboBox();
             labConfig = new Label();
             tabConfig = new TabPage();
             btnDelete = new Button();
@@ -82,7 +82,7 @@ namespace SGS.HN.Labeler
             tabPrint.Controls.Add(txtOrderNoEnd);
             tabPrint.Controls.Add(txtOrderNoStart);
             tabPrint.Controls.Add(labOrderNo);
-            tabPrint.Controls.Add(comboBox1);
+            tabPrint.Controls.Add(cbbExcelConfig);
             tabPrint.Controls.Add(labConfig);
             tabPrint.Location = new Point(4, 24);
             tabPrint.Name = "tabPrint";
@@ -144,6 +144,7 @@ namespace SGS.HN.Labeler
             btnPrint.TabIndex = 8;
             btnPrint.Text = "列印";
             btnPrint.UseVisualStyleBackColor = true;
+            btnPrint.Click += btnPrint_Click;
             // 
             // txtOrderNoEnd
             // 
@@ -171,15 +172,15 @@ namespace SGS.HN.Labeler
             labOrderNo.TabIndex = 2;
             labOrderNo.Text = "訂單編號";
             // 
-            // comboBox1
+            // cbbExcelConfig
             // 
-            comboBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(108, 13);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(395, 23);
-            comboBox1.TabIndex = 1;
+            cbbExcelConfig.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cbbExcelConfig.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbbExcelConfig.FormattingEnabled = true;
+            cbbExcelConfig.Location = new Point(108, 13);
+            cbbExcelConfig.Name = "cbbExcelConfig";
+            cbbExcelConfig.Size = new Size(395, 23);
+            cbbExcelConfig.TabIndex = 1;
             // 
             // labConfig
             // 
@@ -241,7 +242,6 @@ namespace SGS.HN.Labeler
             // 
             dgvConfig.AllowUserToAddRows = false;
             dgvConfig.AllowUserToDeleteRows = false;
-            dgvConfig.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = SystemColors.Control;
             dataGridViewCellStyle1.Font = new Font("Microsoft JhengHei UI", 9F);
@@ -273,6 +273,7 @@ namespace SGS.HN.Labeler
             dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
             dgvConfig.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dgvConfig.RowHeadersVisible = false;
+            dgvConfig.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvConfig.Size = new Size(490, 380);
             dgvConfig.TabIndex = 1;
             // 
@@ -285,16 +286,21 @@ namespace SGS.HN.Labeler
             // 
             // ConfigName
             // 
+            ConfigName.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            ConfigName.DataPropertyName = "ConfigName";
             ConfigName.HeaderText = "Name";
             ConfigName.Name = "ConfigName";
             ConfigName.ReadOnly = true;
+            ConfigName.Width = 67;
             // 
             // ConfigPath
             // 
+            ConfigPath.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            ConfigPath.DataPropertyName = "ConfigPath";
             ConfigPath.HeaderText = "Path";
             ConfigPath.Name = "ConfigPath";
             ConfigPath.ReadOnly = true;
-            ConfigPath.Visible = false;
+            ConfigPath.Width = 57;
             // 
             // statusBarMain
             // 
@@ -326,6 +332,7 @@ namespace SGS.HN.Labeler
             MinimumSize = new Size(540, 540);
             Name = "frmMain";
             Text = "Main";
+            Load += frmMain_Load;
             tabMain.ResumeLayout(false);
             tabPrint.ResumeLayout(false);
             tabPrint.PerformLayout();
@@ -345,18 +352,18 @@ namespace SGS.HN.Labeler
         private Button btnDelete;
         private Button btnSetToDefault;
         private Button btnImport;
-        private DataGridViewCheckBoxColumn IsDeafult;
-        private DataGridViewTextBoxColumn ConfigName;
-        private DataGridViewTextBoxColumn ConfigPath;
         private TextBox txtOrderNoEnd;
         private TextBox txtOrderNoStart;
         private Label labOrderNo;
-        private ComboBox comboBox1;
+        private ComboBox cbbExcelConfig;
         private Label labConfig;
         private RadioButton radPrintOnce;
         private RadioButton radioButton1;
         private TextBox txtOutputMessage;
         private Label labAutoPrint;
         private Button btnPrint;
+        private DataGridViewCheckBoxColumn IsDeafult;
+        private DataGridViewTextBoxColumn ConfigName;
+        private DataGridViewTextBoxColumn ConfigPath;
     }
 }

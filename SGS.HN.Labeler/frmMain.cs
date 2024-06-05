@@ -7,8 +7,11 @@ namespace SGS.HN.Labeler;
 
 public partial class frmMain : Form
 {
+    static private readonly string ExcelConfigDirectory = "ExcelConfig";
+
     private readonly ILogger _log;
     private readonly IExcelConfigService _excelConfig;
+    private readonly string ExcelConfigRoot = Path.Combine(Directory.GetCurrentDirectory(), ExcelConfigDirectory);
 
     public frmMain(
         ILogger<frmMain> logger,
@@ -18,6 +21,26 @@ public partial class frmMain : Form
         InitializeComponent();
         this._log = logger;
         this._excelConfig = excelConfig;
+    }
+
+    private void frmMain_Load(object sender, EventArgs e)
+    {
+        SetExcelConfigList();
+        SetExcelConfigDropDownList();
+    }
+
+    private void SetExcelConfigDropDownList()
+    {
+        IEnumerable<ExcelConfigResultModel>? data = _excelConfig.GetList(ExcelConfigRoot);
+        cbbExcelConfig.DataSource = data.ToList();
+        cbbExcelConfig.DisplayMember = "ConfigName";
+        cbbExcelConfig.ValueMember = "ConfigPath";
+    }
+
+    private void SetExcelConfigList()
+    {
+        IEnumerable<ExcelConfigResultModel>? data = _excelConfig.GetList(ExcelConfigRoot);
+        dgvConfig.DataSource = data.ToList();
     }
 
     private void btnImport_Click(object sender, EventArgs e)
@@ -33,25 +56,25 @@ public partial class frmMain : Form
             {
                 string sourcePath = openFileDialog.FileName;
                 string fileName = Path.GetFileName(sourcePath);
-                string targetPath = Path.Combine(
-                    Directory.GetCurrentDirectory(),
-                    "ExcelConfig",
-                    fileName
-                );
-                ResultModel result = _excelConfig.Import(sourcePath, targetPath);
+                string targetPath = Path.Combine(ExcelConfigRoot, fileName);
+                ExcelConfigImportInfo info = new(sourcePath, targetPath);
+                ResultModel result = _excelConfig.Import(info);
                 if (result.IsSuccess)
                 {
                     MessageBox.Show("Import Success");
-                    _log.LogInformation("Import {fileName}", fileName);
+                    _log.LogInformation("Import {@info}", info);
+                    SetExcelConfigList();
+                    SetExcelConfigDropDownList();
                 }
                 else
                 {
                     MessageBox.Show("Import Fail: " + result.Message);
-                    _log.LogError("Import Fail: {fileName}\n{msg}", fileName, result.Message);
+                    _log.LogError("Import Fail: {@info}\n{msg}", info, result.Message);
                 }
             }
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             _log.LogError(ex, "Import Fail");
             MessageBox.Show(ex.Message);
         }
@@ -65,5 +88,22 @@ public partial class frmMain : Form
     private void btnDelete_Click(object sender, EventArgs e)
     {
 
+    }
+
+    private void btnPrint_Click(object sender, EventArgs e)
+    {
+        // Get the selected item from the dropdown list
+        if (cbbExcelConfig.SelectedItem is ExcelConfigResultModel selectedConfig)
+        {
+            var data = _excelConfig.Load(selectedConfig.ConfigPath);
+            foreach (var item in data)
+            {
+                txtOutputMessage.Text = item + Environment.NewLine + txtOutputMessage.Text;
+                foreach (string s in item.PrintInfo)
+                {
+                    txtOutputMessage.Text = s + Environment.NewLine + txtOutputMessage.Text;
+                }
+            }
+        }
     }
 }

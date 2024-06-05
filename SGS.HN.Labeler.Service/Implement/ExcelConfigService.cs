@@ -1,4 +1,6 @@
-﻿namespace SGS.HN.Labeler.Service.Implement;
+﻿using MiniExcelLibs;
+
+namespace SGS.HN.Labeler.Service.Implement;
 
 public class ExcelConfigService : IExcelConfigService
 {
@@ -42,6 +44,22 @@ public class ExcelConfigService : IExcelConfigService
 
     public IEnumerable<PrintInfoResultModel> Load(string filePath)
     {
-        throw new NotImplementedException();
+        var excelFile = MiniExcel.Query(filePath);
+        return excelFile
+            .Skip(2)
+            .Select(row =>
+            {
+                var rowDict = (IDictionary<string, object>)row;
+                return new PrintInfoResultModel
+                {
+                    ServiceLineId = row.A.ToString(),
+                    BarCodeType = (BarCodeType)row.C,
+                    PrintInfo = rowDict
+                        .Skip(3)
+                        .Select(cell => cell.Value?.ToString())
+                        .Where(value => value != null)
+                        .ToArray()
+                };
+            });
     }
 }

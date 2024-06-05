@@ -16,6 +16,6 @@
         /// <summary>
         /// (額外)列印資訊
         /// </summary>
-        public string[] PrintInfo { get; set; } = [];
+        public string?[] PrintInfo { get; set; } = [];
     }
 }
