@@ -11,16 +11,19 @@ public partial class frmMain : Form
 
     private readonly ILogger _log;
     private readonly IExcelConfigService _excelConfig;
+    private readonly ISLService _sl;
     private readonly string ExcelConfigRoot = Path.Combine(Directory.GetCurrentDirectory(), ExcelConfigDirectory);
 
     public frmMain(
         ILogger<frmMain> logger,
-        IExcelConfigService excelConfig
+        IExcelConfigService excelConfig,
+        ISLService sl
         )
     {
         InitializeComponent();
         this._log = logger;
         this._excelConfig = excelConfig;
+        this._sl = sl;
     }
 
     private void frmMain_Load(object sender, EventArgs e)
@@ -95,8 +98,8 @@ public partial class frmMain : Form
         // Get the selected item from the dropdown list
         if (cbbExcelConfig.SelectedItem is ExcelConfigResultModel selectedConfig)
         {
-            var data = _excelConfig.Load(selectedConfig.ConfigPath);
-            foreach (var item in data)
+            var printInfo = _excelConfig.Load(selectedConfig.ConfigPath);
+            foreach (var item in printInfo)
             {
                 txtOutputMessage.Text = item + Environment.NewLine + txtOutputMessage.Text;
                 foreach (string s in item.PrintInfo)
@@ -104,6 +107,17 @@ public partial class frmMain : Form
                     txtOutputMessage.Text = s + Environment.NewLine + txtOutputMessage.Text;
                 }
             }
+        }
+
+        SLInfo slInfo = new()
+        {
+            OrderNoStart = txtOrderNoStart.Text,
+            OrderNoEnd = txtOrderNoEnd.Text
+        };
+        var slResult = _sl.Query(slInfo);
+        foreach (var item in slResult)
+        {
+            txtOutputMessage.Text = item + Environment.NewLine + txtOutputMessage.Text;
         }
     }
 }

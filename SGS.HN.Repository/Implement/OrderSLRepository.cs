@@ -1,7 +1,7 @@
 ﻿
 namespace SGS.HN.Labeler.Repository.Implement;
 
-internal class OrderSLRepository(LIMS20_UATContext context) : IOrderSLRepository
+public class OrderSLRepository(LIMS20_UATContext context) : IOrderSLRepository
 {
     public IEnumerable<SLDataModel> GetItems(SLQueryCondition condition)
     {

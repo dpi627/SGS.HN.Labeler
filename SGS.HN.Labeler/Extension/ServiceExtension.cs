@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using SGS.HN.Labeler.Repository.Implement;
+using SGS.HN.Labeler.Repository.Interface;
 using SGS.HN.Labeler.Repository.Models;
 using SGS.HN.Labeler.Service.Implement;
 using SGS.HN.Labeler.Service.Interface;
@@ -18,6 +20,7 @@ namespace SGS.HN.Labeler.Extension
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddSingleton<IExcelConfigService, ExcelConfigService>();
+            services.AddSingleton<ISLService, SLService>();
             return services;
         }
 
@@ -28,7 +31,7 @@ namespace SGS.HN.Labeler.Extension
         /// <returns>服務集合</returns>
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
-            //services.AddSingleton<ITestRecordRepository, TestRecordRepository>();
+            services.AddSingleton<IOrderSLRepository, OrderSLRepository>();
             return services;
         }
 

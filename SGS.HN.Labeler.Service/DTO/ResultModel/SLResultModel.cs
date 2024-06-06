@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace SGS.HN.Labeler.Service.DTO.ResultModel;
 
-namespace SGS.HN.Labeler.Service.DTO.ResultModel
+public record SLResultModel
 {
-    internal class SLResultModel
-    {
-    }
+    public string? OrderMid { get; set; }
+    public string? ServiceLineId { get; set; }
 }
