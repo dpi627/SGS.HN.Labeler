@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using SGS.HN.Labeler.Repository.Models;
 using SGS.HN.Labeler.Service.Implement;
 using SGS.HN.Labeler.Service.Interface;
 
@@ -44,6 +47,13 @@ namespace SGS.HN.Labeler.Extension
                 builder.AddSerilog();
             });
 
+            return services;
+        }
+
+        public static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddDbContext<LIMS20_UATContext>(
+                options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
             return services;
         }
 

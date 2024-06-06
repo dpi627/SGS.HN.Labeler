@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using SGS.HN.Labeler.Extension;
 using Serilog;
 
@@ -19,9 +20,15 @@ internal static class Program
         {
             ApplicationConfiguration.Initialize();
 
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .Build();
+
             IServiceCollection? services = new ServiceCollection()
                 .AddServices()
                 .AddRepositories()
+                .AddDbContext(config)
                 .AddForms()
                 .AddMiscs();
 
