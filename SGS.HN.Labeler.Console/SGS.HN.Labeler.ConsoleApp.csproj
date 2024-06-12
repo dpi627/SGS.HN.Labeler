@@ -15,4 +15,10 @@
     <Folder Include="ExcelConfig\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="C:\Users\Brian_Li\.nuget\packages\sgs.lib.tscprinter\1.0.0\contentFiles\any\net8.0\TSCLIB.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
