@@ -1,7 +1,9 @@
 using Microsoft.Extensions.Logging;
 using SGS.HN.Labeler.Service.DTO.Info;
 using SGS.HN.Labeler.Service.DTO.ResultModel;
+using SGS.HN.Labeler.Service.Enum;
 using SGS.HN.Labeler.Service.Interface;
+using SGS.LIB.TscPrinter;
 
 namespace SGS.HN.Labeler;
 
@@ -98,26 +100,86 @@ public partial class frmMain : Form
         // Get the selected item from the dropdown list
         if (cbbExcelConfig.SelectedItem is ExcelConfigResultModel selectedConfig)
         {
+            // 讀取設定檔，取得列印資訊
             var printInfo = _excelConfig.Load(selectedConfig.ConfigPath);
-            foreach (var item in printInfo)
+
+            // 依照訂單區間，取得訂單所有SL
+            SLInfo slInfo = new()
             {
-                txtOutputMessage.Text = item + Environment.NewLine + txtOutputMessage.Text;
-                foreach (string s in item.PrintInfo)
+                OrderNoStart = txtOrderNoStart.Text,
+                OrderNoEnd = txtOrderNoEnd.Text
+            };
+            var slResult = _sl.Query(slInfo);
+
+            TSC.OpenPort("TSC TTP-245");
+            TSC.Setup(77, 18);
+
+            try
+            {
+                foreach (var item in slResult)
                 {
-                    txtOutputMessage.Text = s + Environment.NewLine + txtOutputMessage.Text;
+                    var p = printInfo.Where(pi => pi.ServiceLineId == item.ServiceLineId).FirstOrDefault();
+                    if (p != null)
+                    {
+                        foreach (string s in p.PrintInfo)
+                        {
+                            txtOutputMessage.Text = $"{p.BarCodeType} - {item.OrderMid}, {s}" + Environment.NewLine + txtOutputMessage.Text;
+                            PrintLabel(p.BarCodeType, item.OrderMid, s);
+                        }
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                _log.LogError(ex, "Print Fail");
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                TSC.ClosePort();
+            }
         }
+    }
 
-        SLInfo slInfo = new()
+    private void PrintLabel(BarCodeType barcodeType, string orderNo, string printInfo)
+    {
+        TSC.ClearBuffer();
+        switch (barcodeType)
         {
-            OrderNoStart = txtOrderNoStart.Text,
-            OrderNoEnd = txtOrderNoEnd.Text
-        };
-        var slResult = _sl.Query(slInfo);
-        foreach (var item in slResult)
-        {
-            txtOutputMessage.Text = item + Environment.NewLine + txtOutputMessage.Text;
+            case BarCodeType.OrderNoOnly:
+                PrintOrderNo(orderNo, printInfo);
+                break;
+            case BarCodeType.WithPrintInfo:
+                PrintWithPrintInfo(orderNo, printInfo);
+                break;
         }
+        TSC.PrintLabel();
+    }
+
+    private void PrintOrderNo(string orderNo, string printInfo)
+    {
+        TSC.Barcode(24, 0, orderNo);
+        TSC.QRCode(24, 45, orderNo);
+        TSC.WindowsFont(95, 45, orderNo);
+        TSC.WindowsFont(95, 75, printInfo);
+
+        TSC.Barcode(329, 0, orderNo);
+        TSC.QRCode(329, 45, orderNo);
+        TSC.WindowsFont(400, 45, orderNo);
+        TSC.WindowsFont(400, 75, printInfo);
+    }
+
+    private void PrintWithPrintInfo(string orderNo, string printInfo)
+    {
+        var printAll = $"{orderNo}-{printInfo}";
+        TSC.Barcode(24, 0, printAll, 1, 1);
+        TSC.QRCode(24, 45, printAll, 2);
+        TSC.WindowsFont(95, 45, orderNo);
+        TSC.WindowsFont(95, 75, printInfo);
+
+        TSC.Barcode(329, 0, printAll, 1, 1);
+        TSC.QRCode(329, 45, printAll, 2);
+        TSC.WindowsFont(400, 45, orderNo);
+        TSC.WindowsFont(400, 75, printInfo);
     }
 }

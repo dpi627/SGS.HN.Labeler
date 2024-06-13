@@ -8,7 +8,7 @@
         /// <summary>
         /// 預設，訂單編號
         /// </summary>
-        OrderNo = 0,
+        OrderNoOnly = 0,
         /// <summary>
         /// 訂單編號+列印資訊
         /// </summary>
