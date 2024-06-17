@@ -37,7 +37,7 @@
     <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0" />
-    <PackageReference Include="SGS.LIB.TscPrinter" Version="1.0.0" />
+    <PackageReference Include="SGS.OAD.TscPrinter" Version="1.1.3" />
   </ItemGroup>
 
   <ItemGroup>

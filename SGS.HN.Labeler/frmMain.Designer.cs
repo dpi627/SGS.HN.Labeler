@@ -34,6 +34,8 @@ namespace SGS.HN.Labeler
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             tabMain = new TabControl();
             tabPrint = new TabPage();
+            labPrinter = new Label();
+            cbbPrinter = new ComboBox();
             txtOutputMessage = new TextBox();
             labAutoPrint = new Label();
             radPrintOnce = new RadioButton();
@@ -74,6 +76,8 @@ namespace SGS.HN.Labeler
             // 
             // tabPrint
             // 
+            tabPrint.Controls.Add(labPrinter);
+            tabPrint.Controls.Add(cbbPrinter);
             tabPrint.Controls.Add(txtOutputMessage);
             tabPrint.Controls.Add(labAutoPrint);
             tabPrint.Controls.Add(radPrintOnce);
@@ -92,22 +96,41 @@ namespace SGS.HN.Labeler
             tabPrint.Text = "標籤列印";
             tabPrint.UseVisualStyleBackColor = true;
             // 
+            // labPrinter
+            // 
+            labPrinter.AutoSize = true;
+            labPrinter.Location = new Point(59, 16);
+            labPrinter.Name = "labPrinter";
+            labPrinter.Size = new Size(43, 15);
+            labPrinter.TabIndex = 12;
+            labPrinter.Text = "印表機";
+            // 
+            // cbbPrinter
+            // 
+            cbbPrinter.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cbbPrinter.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbbPrinter.FormattingEnabled = true;
+            cbbPrinter.Location = new Point(108, 13);
+            cbbPrinter.Name = "cbbPrinter";
+            cbbPrinter.Size = new Size(395, 23);
+            cbbPrinter.TabIndex = 11;
+            // 
             // txtOutputMessage
             // 
             txtOutputMessage.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             txtOutputMessage.Font = new Font("Microsoft JhengHei UI", 8F);
-            txtOutputMessage.Location = new Point(13, 98);
+            txtOutputMessage.Location = new Point(13, 129);
             txtOutputMessage.Multiline = true;
             txtOutputMessage.Name = "txtOutputMessage";
             txtOutputMessage.ReadOnly = true;
             txtOutputMessage.ScrollBars = ScrollBars.Vertical;
-            txtOutputMessage.Size = new Size(490, 331);
+            txtOutputMessage.Size = new Size(490, 300);
             txtOutputMessage.TabIndex = 10;
             // 
             // labAutoPrint
             // 
             labAutoPrint.AutoSize = true;
-            labAutoPrint.Location = new Point(47, 75);
+            labAutoPrint.Location = new Point(47, 104);
             labAutoPrint.Name = "labAutoPrint";
             labAutoPrint.Size = new Size(55, 15);
             labAutoPrint.TabIndex = 9;
@@ -116,7 +139,7 @@ namespace SGS.HN.Labeler
             // radPrintOnce
             // 
             radPrintOnce.AutoSize = true;
-            radPrintOnce.Location = new Point(108, 73);
+            radPrintOnce.Location = new Point(108, 102);
             radPrintOnce.Name = "radPrintOnce";
             radPrintOnce.Size = new Size(49, 19);
             radPrintOnce.TabIndex = 0;
@@ -127,7 +150,7 @@ namespace SGS.HN.Labeler
             // radioButton1
             // 
             radioButton1.AutoSize = true;
-            radioButton1.Location = new Point(163, 73);
+            radioButton1.Location = new Point(163, 102);
             radioButton1.Name = "radioButton1";
             radioButton1.Size = new Size(49, 19);
             radioButton1.TabIndex = 1;
@@ -138,7 +161,7 @@ namespace SGS.HN.Labeler
             // btnPrint
             // 
             btnPrint.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnPrint.Location = new Point(428, 71);
+            btnPrint.Location = new Point(428, 100);
             btnPrint.Name = "btnPrint";
             btnPrint.Size = new Size(75, 23);
             btnPrint.TabIndex = 8;
@@ -149,7 +172,7 @@ namespace SGS.HN.Labeler
             // txtOrderNoEnd
             // 
             txtOrderNoEnd.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtOrderNoEnd.Location = new Point(304, 42);
+            txtOrderNoEnd.Location = new Point(304, 71);
             txtOrderNoEnd.Name = "txtOrderNoEnd";
             txtOrderNoEnd.PlaceholderText = "(迄)";
             txtOrderNoEnd.Size = new Size(199, 23);
@@ -157,7 +180,7 @@ namespace SGS.HN.Labeler
             // 
             // txtOrderNoStart
             // 
-            txtOrderNoStart.Location = new Point(108, 42);
+            txtOrderNoStart.Location = new Point(108, 71);
             txtOrderNoStart.Name = "txtOrderNoStart";
             txtOrderNoStart.PlaceholderText = "(起)";
             txtOrderNoStart.Size = new Size(190, 23);
@@ -166,7 +189,7 @@ namespace SGS.HN.Labeler
             // labOrderNo
             // 
             labOrderNo.AutoSize = true;
-            labOrderNo.Location = new Point(47, 45);
+            labOrderNo.Location = new Point(47, 74);
             labOrderNo.Name = "labOrderNo";
             labOrderNo.Size = new Size(55, 15);
             labOrderNo.TabIndex = 2;
@@ -177,7 +200,7 @@ namespace SGS.HN.Labeler
             cbbExcelConfig.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             cbbExcelConfig.DropDownStyle = ComboBoxStyle.DropDownList;
             cbbExcelConfig.FormattingEnabled = true;
-            cbbExcelConfig.Location = new Point(108, 13);
+            cbbExcelConfig.Location = new Point(108, 42);
             cbbExcelConfig.Name = "cbbExcelConfig";
             cbbExcelConfig.Size = new Size(395, 23);
             cbbExcelConfig.TabIndex = 1;
@@ -185,7 +208,7 @@ namespace SGS.HN.Labeler
             // labConfig
             // 
             labConfig.AutoSize = true;
-            labConfig.Location = new Point(59, 16);
+            labConfig.Location = new Point(59, 45);
             labConfig.Name = "labConfig";
             labConfig.Size = new Size(43, 15);
             labConfig.TabIndex = 0;
@@ -214,6 +237,7 @@ namespace SGS.HN.Labeler
             btnDelete.TabIndex = 4;
             btnDelete.Text = "刪除";
             btnDelete.UseVisualStyleBackColor = true;
+            btnDelete.Visible = false;
             btnDelete.Click += btnDelete_Click;
             // 
             // btnSetToDefault
@@ -225,6 +249,7 @@ namespace SGS.HN.Labeler
             btnSetToDefault.TabIndex = 3;
             btnSetToDefault.Text = "設定為預設";
             btnSetToDefault.UseVisualStyleBackColor = true;
+            btnSetToDefault.Visible = false;
             btnSetToDefault.Click += btnSetToDefault_Click;
             // 
             // btnImport
@@ -331,7 +356,7 @@ namespace SGS.HN.Labeler
             Font = new Font("Microsoft JhengHei UI", 9F);
             MinimumSize = new Size(540, 540);
             Name = "frmMain";
-            Text = "Main";
+            Text = "SGS.HN.Labeler";
             Load += frmMain_Load;
             tabMain.ResumeLayout(false);
             tabPrint.ResumeLayout(false);
@@ -365,5 +390,7 @@ namespace SGS.HN.Labeler
         private DataGridViewCheckBoxColumn IsDeafult;
         private DataGridViewTextBoxColumn ConfigName;
         private DataGridViewTextBoxColumn ConfigPath;
+        private Label labPrinter;
+        private ComboBox cbbPrinter;
     }
 }

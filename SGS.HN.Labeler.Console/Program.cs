@@ -1,11 +1,12 @@
-﻿namespace SGS.HN.Labeler.ConsoleApp
+﻿using SGS.OAD.TscPrinter;
+
+namespace SGS.HN.Labeler.ConsoleApp;
+
+internal class Program
 {
-    internal class Program
+    static void Main()
     {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello, World!");
-            //SGS.LIB.TscPrinter.TSC.About();
-        }
+        Console.WriteLine("Hello, World!");
+        TSC.About();
     }
 }

@@ -16,6 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="SGS.OAD.TscPrinter" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="C:\Users\Brian_Li\.nuget\packages\sgs.lib.tscprinter\1.0.0\contentFiles\any\net8.0\TSCLIB.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
