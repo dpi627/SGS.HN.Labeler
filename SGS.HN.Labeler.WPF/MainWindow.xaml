@@ -3,11 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MaterailDesign"
+        xmlns:local="clr-namespace:SGS.HN.Labeler.WPF"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Style="{StaticResource MaterialDesignWindow}"
         Title="MainWindow" Height="600" Width="460">
+    <Window.DataContext>
+        <local:MainViewModel />
+    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -65,6 +68,8 @@
                   Grid.Row="1"
                   Width="Auto"
                   Margin="10"
+                  ItemsSource="{Binding Printers}"
+                  SelectedItem="{Binding SelectedPrinter, Mode=TwoWay}"
                   Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
 
         <ComboBox x:Name="cbbExcelConfig"

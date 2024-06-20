@@ -19,6 +19,7 @@ namespace SGS.HN.Labeler.WPF
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new MainViewModel();
         }
     }
 }
