@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SGS.HN.Labeler.Repository",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SGS.HN.Util", "SGS.HN.Util\SGS.HN.Util.csproj", "{E73FE279-2932-45DC-A588-8595DBBDFEFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGS.HN.Labeler", "SGS.HN.Labeler\SGS.HN.Labeler.csproj", "{36D749C6-2CB3-40E2-B61A-E46C94A050D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SGS.HN.Labeler", "SGS.HN.Labeler\SGS.HN.Labeler.csproj", "{36D749C6-2CB3-40E2-B61A-E46C94A050D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SGS.HN.Labeler.WPF", "SGS.HN.Labeler.WPF\SGS.HN.Labeler.WPF.csproj", "{331E6073-0979-4070-A49C-A3A6A9699EF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{36D749C6-2CB3-40E2-B61A-E46C94A050D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36D749C6-2CB3-40E2-B61A-E46C94A050D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36D749C6-2CB3-40E2-B61A-E46C94A050D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{331E6073-0979-4070-A49C-A3A6A9699EF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{331E6073-0979-4070-A49C-A3A6A9699EF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{331E6073-0979-4070-A49C-A3A6A9699EF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{331E6073-0979-4070-A49C-A3A6A9699EF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
