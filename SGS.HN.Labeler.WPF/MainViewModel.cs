@@ -1,46 +1,26 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Drawing.Printing;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SGS.HN.Labeler.WPF;
 
-internal class MainViewModel : INotifyPropertyChanged
+public partial class MainViewModel : ObservableObject
 {
-    public ObservableCollection<string> Printers { get; set; }
+    [ObservableProperty]
+    private ObservableCollection<string> printers;
 
-    private string _selectedPrinter;
-    public string SelectedPrinter
-    {
-        get { return _selectedPrinter; }
-        set
-        {
-            if (_selectedPrinter != value)
-            {
-                _selectedPrinter = value;
-                OnPropertyChanged(nameof(SelectedPrinter));
-            }
-        }
-    }
+    [ObservableProperty]
+    private string? selectedPrinter;
 
     public MainViewModel()
     {
         Printers = new ObservableCollection<string>(
-        PrinterSettings.InstalledPrinters
-                       .Cast<string>()
-                       .Where(x => x.StartsWith("TSC")));
+            PrinterSettings.InstalledPrinters
+                           .Cast<string>()
+                           .Where(x => x.StartsWith("TSC")));
 
-        // 默認選擇第一個項目
+        // 預設第一台印表機
         if (Printers.Any())
-        {
             SelectedPrinter = Printers.First();
-        }
-
-    }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    protected virtual void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
