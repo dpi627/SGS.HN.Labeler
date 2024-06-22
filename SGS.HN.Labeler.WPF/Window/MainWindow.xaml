@@ -76,6 +76,7 @@
                   Width="Auto"
                   Margin="10"
                   ItemsSource="{Binding ExcelConfigs}"
+                  SelectedItem="{Binding SelectedExcelConfig, Mode=TwoWay}"
                   Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
 
         <TextBox x:Name="txtOrderMid"
@@ -84,6 +85,7 @@
                  Width="Auto"
                  Margin="10"
                  AcceptsReturn="True"
+                 Text="{Binding OrderMid, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
 
         <Button HorizontalAlignment="Left"
@@ -93,7 +95,9 @@
                 Margin="10"
                 Width="30"
                 Height="30"
-                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                Visibility="{Binding IsClearButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Command="{Binding ClearHistoryCommand}"
+                IsEnabled="{Binding ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                 Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
                 ToolTip="清除歷程記錄">
             <materialDesign:PackIcon
@@ -109,7 +113,8 @@
                 Grid.Column="1"
                 HorizontalAlignment="Right"
                 Margin="10"
-                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                Command="{Binding PrintLabelCommand}"
+                IsEnabled="{Binding ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                 Style="{StaticResource MaterialDesignRaisedButton}"
                 materialDesign:ButtonAssist.CornerRadius="5"
                 />
@@ -122,6 +127,7 @@
             materialDesign:HintAssist.Hint="歷程記錄"
             AcceptsReturn="True"
             IsReadOnly="True"
+            Text="{Binding PrintHistory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             Style="{StaticResource MaterialDesignOutlinedTextBox}"
             TextWrapping="Wrap"
             VerticalScrollBarVisibility="Auto"
