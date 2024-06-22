@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SGS.HN.Labeler.Service.Implement;
 using SGS.HN.Labeler.Service.Interface;
+using SGS.HN.Labeler.WPF.ViewModel;
 using System.Windows;
 
 namespace SGS.HN.Labeler.WPF;
@@ -10,6 +11,8 @@ namespace SGS.HN.Labeler.WPF;
 /// </summary>
 public partial class App : Application
 {
+    public IServiceProvider ServiceProvider { get; }
+
     public App()
     {
         var services = new ServiceCollection();
@@ -21,21 +24,18 @@ public partial class App : Application
     private void ConfigureServices(IServiceCollection services)
     {
         services.AddSingleton<IExcelConfigService, ExcelConfigService>();
-        services.AddTransient<MainViewModel>();
+        services.AddTransient<IMainViewModel, MainViewModel>();
+        services.AddTransient<MainWindow>(p => new MainWindow
+        {
+            DataContext = p.GetRequiredService<IMainViewModel>()
+        });
         // 添加其他服務...
     }
-
-    public IServiceProvider ServiceProvider { get; }
 
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
-
-        var mainWindow = new MainWindow
-        {
-            DataContext = ServiceProvider.GetRequiredService<MainViewModel>()
-        };
-
+        var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
         mainWindow.Show();
     }
 }
