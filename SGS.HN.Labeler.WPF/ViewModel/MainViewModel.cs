@@ -1,9 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using System.Drawing.Printing;
 using System.IO;
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SGS.HN.Labeler.Service.Interface;
+using SGS.HN.Labeler.WPF.Model;
 
 namespace SGS.HN.Labeler.WPF.ViewModel;
 
@@ -20,10 +22,10 @@ public partial class MainViewModel : ObservableObject, IMainViewModel
     private string? selectedPrinter;
 
     [ObservableProperty]
-    private ObservableCollection<string> excelConfigs;
+    private ObservableCollection<ComboBoxItem> excelConfigs;
 
     [ObservableProperty]
-    private string? selectedExcelConfig;
+    private ComboBoxItem? selectedExcelConfig;
 
     [ObservableProperty]
     private string? orderMid;
@@ -37,13 +39,21 @@ public partial class MainViewModel : ObservableObject, IMainViewModel
     [ObservableProperty]
     private bool isClearButtonVisible = false;
 
+    [ObservableProperty]
+    private bool isPrintButtonEnabled = true;
+
+    [ObservableProperty]
+    private bool isAutoPrint;
+
     public MainViewModel(IExcelConfigService ExcelConfig)
     {
-        this._excelConfig = ExcelConfig;
+        _excelConfig = ExcelConfig;
         SetExcelConfigRoot();
-        this.ExcelConfigs = new ObservableCollection<string>(
-            _excelConfig.GetList(ExcelConfigRoot)
-            .Select(x => x.ConfigName)!);
+
+        var data = _excelConfig
+            .GetList(ExcelConfigRoot)
+            .Select(x => new ComboBoxItem(x.ConfigName, x.ConfigPath));
+        ExcelConfigs = new ObservableCollection<ComboBoxItem>(data);
 
         Printers = new ObservableCollection<string>(
             PrinterSettings.InstalledPrinters
@@ -56,27 +66,40 @@ public partial class MainViewModel : ObservableObject, IMainViewModel
 
         // 預設第一個Excel配置
         if (ExcelConfigs.Any())
-            SelectedExcelConfig = ExcelConfigs.First();`
+            SelectedExcelConfig = ExcelConfigs.First();
+    }
+
+    [RelayCommand]
+    private void TogglePrintButton(bool isChecked)
+    {
+        IsPrintButtonEnabled = !isChecked;
     }
 
     [RelayCommand]
     private void PrintLabel()
     {
         // 實現打印標籤的邏輯
-        System.Diagnostics.Debug.WriteLine($"Selected Printer: {SelectedPrinter}");
-        System.Diagnostics.Debug.WriteLine($"Selected Excel Config: {SelectedExcelConfig}");
-        System.Diagnostics.Debug.WriteLine($"Order MID: {OrderMid}");
-        PrintHistory += $"Printed: {OrderMid} on {SelectedPrinter} with {SelectedExcelConfig}\n";
+        Debug.WriteLine($"Selected Printer: {SelectedPrinter}");
+        Debug.WriteLine($"Selected Excel Config: {SelectedExcelConfig}");
+        Debug.WriteLine($"Order MID: {OrderMid}");
+        PrintHistory = $"Printed: {OrderMid} on {SelectedPrinter} with {SelectedExcelConfig}\n{PrintHistory}";
         IsClearButtonVisible = true;
+        OrderMid = string.Empty;
+    }
+
+    [RelayCommand]
+    private void OrderMidEnter()
+    {
+        Debug.WriteLine(OrderMid);
+
+        if (IsAutoPrint && !string.IsNullOrEmpty(OrderMid))
+            PrintLabel();
     }
 
     [RelayCommand]
     private void ClearHistory()
     {
         // 實現清除歷史記錄的邏輯
-        OrderMid = string.Empty;
-        SelectedPrinter = null;
-        SelectedExcelConfig = null;
         PrintHistory = string.Empty;
         IsClearButtonVisible = false;
     }

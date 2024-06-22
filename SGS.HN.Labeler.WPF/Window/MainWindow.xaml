@@ -75,6 +75,8 @@
                   Grid.Row="2"
                   Width="Auto"
                   Margin="10"
+                  DisplayMemberPath="Text"
+                  SelectedValuePath="Value"
                   ItemsSource="{Binding ExcelConfigs}"
                   SelectedItem="{Binding SelectedExcelConfig, Mode=TwoWay}"
                   Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
@@ -84,9 +86,12 @@
                  Grid.Row="3"
                  Width="Auto"
                  Margin="10"
-                 AcceptsReturn="True"
                  Text="{Binding OrderMid, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                 Style="{StaticResource MaterialDesignOutlinedTextBox}">
+            <TextBox.InputBindings>
+                <KeyBinding Key="Enter" Command="{Binding OrderMidEnterCommand}" />
+            </TextBox.InputBindings>
+        </TextBox>
 
         <Button HorizontalAlignment="Left"
                 VerticalAlignment="Center"
@@ -114,10 +119,26 @@
                 HorizontalAlignment="Right"
                 Margin="10"
                 Command="{Binding PrintLabelCommand}"
-                IsEnabled="{Binding ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                IsEnabled="{Binding IsPrintButtonEnabled}"
                 Style="{StaticResource MaterialDesignRaisedButton}"
                 materialDesign:ButtonAssist.CornerRadius="5"
                 />
+
+        <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left"
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Margin="10">
+            <ToggleButton IsChecked="{Binding IsAutoPrint, Mode=TwoWay}"
+                              Command="{Binding TogglePrintButtonCommand}"
+                              CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
+                              Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                              ToolTip="自動列印"/>
+            <TextBlock VerticalAlignment="Center"
+                           Margin="5,0,0,0"
+                           FontSize="14"
+                           Text="自動列印"/>
+        </StackPanel>
 
         <TextBox
             Grid.Row="5"
@@ -132,5 +153,6 @@
             TextWrapping="Wrap"
             VerticalScrollBarVisibility="Auto"
             />
+
     </Grid>
 </Window>
