@@ -45,6 +45,16 @@ public partial class MainViewModel : ObservableObject, IMainViewModel
     [ObservableProperty]
     private bool isAutoPrint;
 
+    public event Action? OrdMidFocused;
+
+    partial void OnIsAutoPrintChanged(bool value)
+    {
+        if (value)
+        {
+            OrdMidFocused?.Invoke();
+        }
+    }
+
     public MainViewModel(IExcelConfigService ExcelConfig)
     {
         _excelConfig = ExcelConfig;
