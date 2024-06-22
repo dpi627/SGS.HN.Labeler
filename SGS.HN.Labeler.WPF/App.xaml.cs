@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SGS.HN.Labeler.Service.Implement;
 using SGS.HN.Labeler.Service.Interface;
+using SGS.HN.Labeler.WPF.Service;
 using SGS.HN.Labeler.WPF.ViewModel;
 using System.Windows;
 
@@ -30,6 +31,7 @@ public partial class App : Application
             DataContext = p.GetRequiredService<IMainViewModel>()
         });
         // 添加其他服務...
+        services.AddSingleton<IDialogService, DialogService>();
     }
 
     protected override void OnStartup(StartupEventArgs e)

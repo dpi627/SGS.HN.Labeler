@@ -9,35 +9,36 @@
         mc:Ignorable="d"
         Style="{StaticResource MaterialDesignWindow}"
         Title="MainWindow" Height="600" Width="460">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <materialDesign:DialogHost Identifier="RootDialog">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-        <materialDesign:ColorZone
+            <materialDesign:ColorZone
             Grid.ColumnSpan="2"
             Padding="16"
             Mode="PrimaryMid"
             Margin="0,0,0,10">
-            <StackPanel Orientation="Horizontal" >
-                <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
-                <TextBlock Margin="16,0,0,0"
+                <StackPanel Orientation="Horizontal" >
+                    <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
+                    <TextBlock Margin="16,0,0,0"
                            FontSize="14"
                            VerticalAlignment="Center"
                            Text="SGS HN Labeler" />
-            </StackPanel>
-        </materialDesign:ColorZone>
+                </StackPanel>
+            </materialDesign:ColorZone>
 
-        <TextBlock Grid.Row="1"
+            <TextBlock Grid.Row="1"
                    Grid.Column="0"
                    Margin="10"
                    VerticalAlignment="Center"
@@ -45,7 +46,7 @@
                    FontSize="16"
                    Text="印表機" />
 
-        <TextBlock Grid.Row="2"
+            <TextBlock Grid.Row="2"
                      Grid.Column="0"
                      Margin="10"
                      VerticalAlignment="Center"
@@ -53,7 +54,7 @@
                      FontSize="16"
                      Text="Excel" />
 
-        <TextBlock Grid.Row="3"
+            <TextBlock Grid.Row="3"
                      Grid.Column="0"
                      Margin="10"
                      VerticalAlignment="Center"
@@ -61,7 +62,7 @@
                      FontSize="16"
                      Text="訂單編號" />
 
-        <ComboBox x:Name="cbbPrinter"
+            <ComboBox x:Name="cbbPrinter"
                   Grid.Column="1"
                   Grid.Row="1"
                   Width="Auto"
@@ -70,7 +71,7 @@
                   SelectedItem="{Binding SelectedPrinter, Mode=TwoWay}"
                   Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
 
-        <ComboBox x:Name="cbbExcelConfig"
+            <ComboBox x:Name="cbbExcelConfig"
                   Grid.Column="1"
                   Grid.Row="2"
                   Width="Auto"
@@ -81,19 +82,19 @@
                   SelectedItem="{Binding SelectedExcelConfig, Mode=TwoWay}"
                   Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
 
-        <TextBox x:Name="txtOrderMid"
+            <TextBox x:Name="txtOrderMid"
                  Grid.Column="1"
                  Grid.Row="3"
                  Width="Auto"
                  Margin="10"
                  Text="{Binding OrderMid, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource MaterialDesignOutlinedTextBox}">
-            <TextBox.InputBindings>
-                <KeyBinding Key="Enter" Command="{Binding OrderMidEnterCommand}" />
-            </TextBox.InputBindings>
-        </TextBox>
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding OrderMidEnterCommand}" />
+                </TextBox.InputBindings>
+            </TextBox>
 
-        <Button HorizontalAlignment="Left"
+            <Button HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Grid.Row="4"
                 Grid.Column="0"
@@ -105,14 +106,14 @@
                 IsEnabled="{Binding ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                 Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
                 ToolTip="清除歷程記錄">
-            <materialDesign:PackIcon
+                <materialDesign:PackIcon
                 Width="{StaticResource IconSize}"
                 Height="{StaticResource IconSize}"
                 Kind="Close"
                 />
-        </Button>
+            </Button>
 
-        <Button Width="{StaticResource ButtonWidth}"
+            <Button Width="{StaticResource ButtonWidth}"
                 Content="列印標籤"
                 Grid.Row="4"
                 Grid.Column="1"
@@ -124,23 +125,23 @@
                 materialDesign:ButtonAssist.CornerRadius="5"
                 />
 
-        <StackPanel Orientation="Horizontal"
+            <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Left"
                         Grid.Row="4"
                         Grid.Column="1"
                         Margin="10">
-            <ToggleButton IsChecked="{Binding IsAutoPrint, Mode=TwoWay}"
+                <ToggleButton IsChecked="{Binding IsAutoPrint, Mode=TwoWay}"
                               Command="{Binding TogglePrintButtonCommand}"
                               CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
                               Style="{StaticResource MaterialDesignSwitchToggleButton}"
                               ToolTip="自動列印"/>
-            <TextBlock VerticalAlignment="Center"
+                <TextBlock VerticalAlignment="Center"
                            Margin="5,0,0,0"
                            FontSize="14"
                            Text="自動列印"/>
-        </StackPanel>
+            </StackPanel>
 
-        <TextBox
+            <TextBox
             Grid.Row="5"
             Margin="10"
             Grid.ColumnSpan="2"
@@ -154,5 +155,6 @@
             VerticalScrollBarVisibility="Auto"
             />
 
-    </Grid>
+        </Grid>
+    </materialDesign:DialogHost>
 </Window>

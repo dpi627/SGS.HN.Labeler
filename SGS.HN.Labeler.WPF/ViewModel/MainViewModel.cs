@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SGS.HN.Labeler.Service.Interface;
 using SGS.HN.Labeler.WPF.Model;
+using SGS.HN.Labeler.WPF.Service;
 
 namespace SGS.HN.Labeler.WPF.ViewModel;
 
@@ -13,6 +14,7 @@ public partial class MainViewModel : ObservableObject, IMainViewModel
 {
     static private readonly string ExcelConfigDirectory = "ExcelConfig";
     private readonly IExcelConfigService _excelConfig;
+    private readonly IDialogService _dialog;
     private string ExcelConfigRoot;
 
     [ObservableProperty]
@@ -55,9 +57,10 @@ public partial class MainViewModel : ObservableObject, IMainViewModel
         }
     }
 
-    public MainViewModel(IExcelConfigService ExcelConfig)
+    public MainViewModel(IExcelConfigService ExcelConfig, IDialogService dialog)
     {
         _excelConfig = ExcelConfig;
+        _dialog = dialog;
         SetExcelConfigRoot();
 
         var data = _excelConfig
@@ -86,8 +89,14 @@ public partial class MainViewModel : ObservableObject, IMainViewModel
     }
 
     [RelayCommand]
-    private void PrintLabel()
+    private async void PrintLabel()
     {
+        if (string.IsNullOrWhiteSpace(orderMid))
+        {
+            await _dialog.ShowMessageAsync("訂單編號不可空白");
+            return;
+        }
+
         // 實現打印標籤的邏輯
         Debug.WriteLine($"Selected Printer: {SelectedPrinter}");
         Debug.WriteLine($"Selected Excel Config: {SelectedExcelConfig}");
