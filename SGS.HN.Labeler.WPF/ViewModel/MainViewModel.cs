@@ -8,9 +8,9 @@ namespace SGS.HN.Labeler.WPF.ViewModel;
 
 public partial class MainViewModel : ObservableObject, IMainViewModel
 {
-    //static private readonly string ExcelConfigDirectory = "ExcelConfig";
-    //private readonly IExcelConfigService _excelConfig;
-    //private string ExcelConfigRoot;
+    static private readonly string ExcelConfigDirectory = "ExcelConfig";
+    private readonly IExcelConfigService _excelConfig;
+    private string ExcelConfigRoot;
 
     [ObservableProperty]
     private ObservableCollection<string> printers;
@@ -23,11 +23,11 @@ public partial class MainViewModel : ObservableObject, IMainViewModel
 
     public MainViewModel(IExcelConfigService ExcelConfig)
     {
-        //this._excelConfig = ExcelConfig;
-
-        //this.ExcelConfigs = new ObservableCollection<string>(
-        //    _excelConfig.GetList(ExcelConfigRoot)
-        //    .Select(x => x.ConfigName)!);
+        this._excelConfig = ExcelConfig;
+        SetExcelConfigRoot();
+        this.ExcelConfigs = new ObservableCollection<string>(
+            _excelConfig.GetList(ExcelConfigRoot)
+            .Select(x => x.ConfigName)!);
 
         Printers = new ObservableCollection<string>(
             PrinterSettings.InstalledPrinters
@@ -39,12 +39,12 @@ public partial class MainViewModel : ObservableObject, IMainViewModel
             SelectedPrinter = Printers.First();
     }
 
-    //private void SetExcelConfigRoot()
-    //{
-    //    if (!Directory.Exists(ExcelConfigDirectory))
-    //    {
-    //        Directory.CreateDirectory(ExcelConfigDirectory);
-    //    }
-    //    ExcelConfigRoot = Path.Combine(Directory.GetCurrentDirectory(), ExcelConfigDirectory);
-    //}
+    private void SetExcelConfigRoot()
+    {
+        if (!Directory.Exists(ExcelConfigDirectory))
+        {
+            Directory.CreateDirectory(ExcelConfigDirectory);
+        }
+        ExcelConfigRoot = Path.Combine(Directory.GetCurrentDirectory(), ExcelConfigDirectory);
+    }
 }
