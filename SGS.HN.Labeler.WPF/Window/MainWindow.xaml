@@ -52,7 +52,7 @@
                      VerticalAlignment="Center"
                      HorizontalAlignment="Right"
                      FontSize="16"
-                     Text="Excel" />
+                     Text="設定檔" />
 
             <TextBlock Grid.Row="3"
                      Grid.Column="0"

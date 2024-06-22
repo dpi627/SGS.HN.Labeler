@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 using SGS.HN.Labeler.Service.Interface;
 using SGS.HN.Labeler.WPF.Model;
 using SGS.HN.Labeler.WPF.Service;
+using System.Text.RegularExpressions;
 
 namespace SGS.HN.Labeler.WPF.ViewModel;
 
@@ -29,8 +30,18 @@ public partial class MainViewModel : ObservableObject, IMainViewModel
     [ObservableProperty]
     private ComboBoxItem? selectedExcelConfig;
 
-    [ObservableProperty]
+    #region 不使用 [ObservableProperty]，直接寫屬性內容
+    /* 為了將資料轉大寫，使用完整寫法，非 Attribute 方式
+     * 必須使用 field 搭配 public property
+     * setter 中使用 SetProperty(ref field, value) 來觸發 PropertyChanged 事件
+     */
     private string? orderMid;
+    public string? OrderMid
+    {
+        get => orderMid;
+        set => SetProperty(ref orderMid, value == null ? value : value.ToUpper());
+    }
+    #endregion
 
     [ObservableProperty]
     private string? printHistory;
@@ -89,12 +100,31 @@ public partial class MainViewModel : ObservableObject, IMainViewModel
     }
 
     [RelayCommand]
-    private async void PrintLabel()
+    private async Task PrintLabel()
     {
+        if (string.IsNullOrWhiteSpace(selectedPrinter))
+        {
+            await _dialog.ShowMessageAsync("請選擇印表機");
+            return;
+        }
+        if (selectedExcelConfig == default)
+        {
+            await _dialog.ShowMessageAsync("請選擇設定檔");
+            return;
+        }
         if (string.IsNullOrWhiteSpace(orderMid))
         {
             await _dialog.ShowMessageAsync("訂單編號不可空白");
             return;
+        }
+        else
+        {
+            var orderMidPattern = @"^[A-Z]{3}\d{2}[A-C0-9][0-9]{5,}$";
+            if (!Regex.IsMatch(orderMid, orderMidPattern))
+            {
+                await _dialog.ShowMessageAsync("訂單編號格式不正確");
+                return;
+            }
         }
 
         // 實現打印標籤的邏輯
@@ -107,12 +137,12 @@ public partial class MainViewModel : ObservableObject, IMainViewModel
     }
 
     [RelayCommand]
-    private void OrderMidEnter()
+    private async void OrderMidEnter()
     {
         Debug.WriteLine(OrderMid);
 
         if (IsAutoPrint && !string.IsNullOrEmpty(OrderMid))
-            PrintLabel();
+            await PrintLabel();
     }
 
     [RelayCommand]
