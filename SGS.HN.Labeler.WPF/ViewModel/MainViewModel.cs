@@ -131,7 +131,8 @@ public partial class MainViewModel : ObservableObject, IMainViewModel
         Debug.WriteLine($"Selected Printer: {SelectedPrinter}");
         Debug.WriteLine($"Selected Excel Config: {SelectedExcelConfig}");
         Debug.WriteLine($"Order MID: {OrderMid}");
-        PrintHistory = $"Printed: {OrderMid} on {SelectedPrinter} with {SelectedExcelConfig}\n{PrintHistory}";
+        //PrintHistory = $"Printed: {OrderMid} on {SelectedPrinter} with {SelectedExcelConfig.Text}\n{PrintHistory}";
+        PrintHistory = $"Printed: {OrderMid}\n{PrintHistory}";
         IsClearButtonVisible = true;
         OrderMid = string.Empty;
     }
