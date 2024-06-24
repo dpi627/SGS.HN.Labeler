@@ -4,3 +4,4 @@ git push origin dev
 git push github dev
 git push origin main
 git push github main
+git switch dev
