@@ -72,11 +72,11 @@ public partial class LabelPrintViewModel : ObservableObject
 
     public LabelPrintViewModel(
         IExcelConfigService ExcelConfig,
-        //ISLService SLService,
+        ISLService SLService,
         IDialogService dialog)
     {
         _excelConfig = ExcelConfig;
-        //_sl = SLService;
+        _sl = SLService;
         _dialog = dialog;
         SetExcelConfigRoot();
 
