@@ -13,147 +13,54 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
 
-            <materialDesign:ColorZone
-            Grid.ColumnSpan="2"
-            Padding="16"
-            Mode="PrimaryMid"
-            Margin="0,0,0,10">
-                <StackPanel Orientation="Horizontal" >
-                    <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
-                    <TextBlock Margin="16,0,0,0"
-                           FontSize="14"
-                           VerticalAlignment="Center"
-                           Text="SGS HN Labeler" />
-                </StackPanel>
+            <materialDesign:ColorZone Mode="PrimaryMid" Padding="16">
+                <DockPanel>
+                    <ToggleButton x:Name="MenuToggleButton"
+                        Style="{StaticResource MaterialDesignHamburgerToggleButton}"
+                        IsChecked="{Binding IsLeftDrawerOpen}"
+                        DockPanel.Dock="Left"/>
+                    <TextBlock HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Text="標籤列印"
+                        FontSize="22"/>
+                </DockPanel>
             </materialDesign:ColorZone>
 
-            <TextBlock Grid.Row="1"
-                   Grid.Column="0"
-                   Margin="10"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Right"
-                   FontSize="16"
-                   Text="印表機" />
+            <materialDesign:DrawerHost x:Name="DrawerHost"
+                                   IsLeftDrawerOpen="{Binding IsLeftDrawerOpen}"
+                                   Grid.Row="1">
+                <materialDesign:DrawerHost.LeftDrawerContent>
+                    <StackPanel Width="220">
+                        <Button Content="Feature 1" Margin="16" Command="{Binding NavigateToLabelPrintAsyncCommand}"/>
+                        <Button Content="Feature 2" Margin="16" Command="{Binding NavigateToExcelConfigAsyncCommand}"/>
+                    </StackPanel>
+                </materialDesign:DrawerHost.LeftDrawerContent>
 
-            <TextBlock Grid.Row="2"
-                     Grid.Column="0"
-                     Margin="10"
-                     VerticalAlignment="Center"
-                     HorizontalAlignment="Right"
-                     FontSize="16"
-                     Text="設定檔" />
+                <Grid>
+                    <Frame x:Name="MainFrame" Content="{Binding CurrentPage}" NavigationUIVisibility="Hidden"/>
+                    <materialDesign:Card UniformCornerRadius="14"
+                         Padding="10"
+                         materialDesign:ElevationAssist.Elevation="Dp4"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                            <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                         Value="0"
+                         IsIndeterminate="True"
+                         Width="50"
+                         Height="50"/>
+                            <TextBlock Text="Loading..."
+                       HorizontalAlignment="Center"
+                       Margin="0,8,0,0"/>
+                        </StackPanel>
+                    </materialDesign:Card>
+                </Grid>
 
-            <TextBlock Grid.Row="3"
-                     Grid.Column="0"
-                     Margin="10"
-                     VerticalAlignment="Center"
-                     HorizontalAlignment="Right"
-                     FontSize="16"
-                     Text="訂單編號" />
-
-            <ComboBox x:Name="cbbPrinter"
-                  Grid.Column="1"
-                  Grid.Row="1"
-                  Width="Auto"
-                  Margin="10"
-                  ItemsSource="{Binding Printers}"
-                  SelectedItem="{Binding SelectedPrinter, Mode=TwoWay}"
-                  Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
-
-            <ComboBox x:Name="cbbExcelConfig"
-                  Grid.Column="1"
-                  Grid.Row="2"
-                  Width="Auto"
-                  Margin="10"
-                  DisplayMemberPath="Text"
-                  SelectedValuePath="Value"
-                  ItemsSource="{Binding ExcelConfigs}"
-                  SelectedItem="{Binding SelectedExcelConfig, Mode=TwoWay}"
-                  Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
-
-            <TextBox x:Name="txtOrderMid"
-                 Grid.Column="1"
-                 Grid.Row="3"
-                 Width="Auto"
-                 Margin="10"
-                 Text="{Binding OrderMid, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 Style="{StaticResource MaterialDesignOutlinedTextBox}">
-                <TextBox.InputBindings>
-                    <KeyBinding Key="Enter" Command="{Binding OrderMidEnterCommand}" />
-                </TextBox.InputBindings>
-            </TextBox>
-
-            <Button HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                Grid.Row="4"
-                Grid.Column="0"
-                Margin="10"
-                Width="30"
-                Height="30"
-                Visibility="{Binding IsClearButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                Command="{Binding ClearHistoryCommand}"
-                IsEnabled="{Binding ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
-                ToolTip="清除歷程記錄">
-                <materialDesign:PackIcon
-                Width="{StaticResource IconSize}"
-                Height="{StaticResource IconSize}"
-                Kind="Close"
-                />
-            </Button>
-
-            <Button Width="{StaticResource ButtonWidth}"
-                Content="列印標籤"
-                Grid.Row="4"
-                Grid.Column="1"
-                HorizontalAlignment="Right"
-                Margin="10"
-                Command="{Binding PrintLabelCommand}"
-                IsEnabled="{Binding IsPrintButtonEnabled}"
-                Style="{StaticResource MaterialDesignRaisedButton}"
-                materialDesign:ButtonAssist.CornerRadius="5"
-                />
-
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Left"
-                        Grid.Row="4"
-                        Grid.Column="1"
-                        Margin="10">
-                <ToggleButton IsChecked="{Binding IsAutoPrint, Mode=TwoWay}"
-                              Command="{Binding TogglePrintButtonCommand}"
-                              CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
-                              Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                              ToolTip="自動列印"/>
-                <TextBlock VerticalAlignment="Center"
-                           Margin="5,0,0,0"
-                           FontSize="14"
-                           Text="自動列印"/>
-            </StackPanel>
-
-            <TextBox
-            Grid.Row="5"
-            Margin="10"
-            Grid.ColumnSpan="2"
-            Height="Auto"
-            materialDesign:HintAssist.Hint="歷程記錄"
-            AcceptsReturn="True"
-            IsReadOnly="True"
-            Text="{Binding PrintHistory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            Style="{StaticResource MaterialDesignOutlinedTextBox}"
-            TextWrapping="Wrap"
-            VerticalScrollBarVisibility="Auto"
-            />
+            </materialDesign:DrawerHost>
 
         </Grid>
     </materialDesign:DialogHost>

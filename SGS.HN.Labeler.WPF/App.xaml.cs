@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using SGS.HN.Labeler.Service.Implement;
 using SGS.HN.Labeler.Service.Interface;
+using SGS.HN.Labeler.WPF.Pages;
 using SGS.HN.Labeler.WPF.Service;
 using SGS.HN.Labeler.WPF.ViewModel;
 using System.Windows;
@@ -20,28 +21,30 @@ public partial class App : Application
         AppHost = Host.CreateDefaultBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddSingleton<IExcelConfigService, ExcelConfigService>();
-                    services.AddTransient<IMainViewModel, MainViewModel>();
-                    services.AddSingleton<MainWindow>(p => new MainWindow
+                    services.AddSingleton(p => new MainWindow
                     {
-                        DataContext = p.GetRequiredService<IMainViewModel>()
+                        DataContext = p.GetRequiredService<MainViewModel>()
                     });
-                    // 添加其他服務...
+
+                    // pages
+                    services.AddTransient(p => new LabelPrintPage
+                    {
+                        DataContext = p.GetRequiredService<LabelPrintViewModel>()
+                    });
+                    services.AddTransient(p => new ExcelConfigPage
+                    {
+                        DataContext = p.GetRequiredService<LabelPrintViewModel>()
+                    });
+
+                    // view models
+                    services.AddTransient<MainViewModel>();
+                    services.AddTransient<LabelPrintViewModel>();
+
+                    // other services
+                    services.AddSingleton<IExcelConfigService, ExcelConfigService>();
                     services.AddSingleton<IDialogService, DialogService>();
                 })
                 .Build();
-    }
-
-    private void ConfigureServices(IServiceCollection services)
-    {
-        services.AddSingleton<IExcelConfigService, ExcelConfigService>();
-        services.AddTransient<IMainViewModel, MainViewModel>();
-        services.AddTransient<MainWindow>(p => new MainWindow
-        {
-            DataContext = p.GetRequiredService<IMainViewModel>()
-        });
-        // 添加其他服務...
-        services.AddSingleton<IDialogService, DialogService>();
     }
 
     protected override async void OnStartup(StartupEventArgs e)

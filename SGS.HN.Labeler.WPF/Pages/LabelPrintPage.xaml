@@ -1,0 +1,143 @@
+﻿<Page x:Class="SGS.HN.Labeler.WPF.Pages.LabelPrintPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:SGS.HN.Labeler.WPF.Pages"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:vm="clr-namespace:SGS.HN.Labeler.WPF.ViewModel"
+      d:DataContext="{d:DesignInstance Type=vm:LabelPrintViewModel}"
+      mc:Ignorable="d"
+      d:DesignHeight="600" d:DesignWidth="400" d:Background="#FFF"
+      Title="LabelPrintPage">
+
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0"
+                Grid.Column="0"
+                Margin="10"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right"
+                FontSize="16"
+                Text="印表機" />
+
+            <TextBlock Grid.Row="1"
+                Grid.Column="0"
+                Margin="10"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right"
+                FontSize="16"
+                Text="設定檔" />
+
+            <TextBlock Grid.Row="2"
+                 Grid.Column="0"
+                 Margin="10"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Right"
+                 FontSize="16"
+                 Text="訂單編號" />
+
+            <ComboBox x:Name="cbbPrinter"
+                Grid.Column="1"
+                Grid.Row="0"
+                Width="Auto"
+                Margin="10"
+                ItemsSource="{Binding Printers}"
+                SelectedItem="{Binding SelectedPrinter, Mode=TwoWay}"
+                Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
+
+            <ComboBox x:Name="cbbExcelConfig"
+                Grid.Column="1"
+                Grid.Row="1"
+                Width="Auto"
+                Margin="10"
+                DisplayMemberPath="Text"
+                SelectedValuePath="Value"
+                ItemsSource="{Binding ExcelConfigs}"
+                SelectedItem="{Binding SelectedExcelConfig, Mode=TwoWay}"
+                Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
+
+            <TextBox x:Name="txtOrderMid"
+                Grid.Column="1"
+                Grid.Row="2"
+                Width="Auto"
+                Margin="10"
+                Text="{Binding OrderMid, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Style="{StaticResource MaterialDesignOutlinedTextBox}">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding OrderMidEnterCommand}" />
+                </TextBox.InputBindings>
+            </TextBox>
+
+            <Button HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Grid.Row="3"
+                Grid.Column="0"
+                Margin="10"
+                Width="30"
+                Height="30"
+                Visibility="{Binding IsClearButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Command="{Binding ClearHistoryCommand}"
+                IsEnabled="{Binding ControlsEnabled}"
+                Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                ToolTip="清除歷程記錄">
+                        <materialDesign:PackIcon
+                Width="{StaticResource IconSize}"
+                Height="{StaticResource IconSize}"
+                Kind="Close"/>
+            </Button>
+
+            <Button Width="{StaticResource ButtonWidth}"
+                Content="列印標籤"
+                Grid.Row="3"
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                Margin="10"
+                Command="{Binding PrintLabelCommand}"
+                IsEnabled="{Binding IsPrintButtonEnabled}"
+                Style="{StaticResource MaterialDesignRaisedButton}"
+                materialDesign:ButtonAssist.CornerRadius="5"/>
+
+            <StackPanel Orientation="Horizontal"
+                HorizontalAlignment="Left"
+                Grid.Row="3"
+                Grid.Column="1"
+                Margin="10">
+                <ToggleButton IsChecked="{Binding IsAutoPrint, Mode=TwoWay}"
+                      Command="{Binding TogglePrintButtonCommand}"
+                      CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
+                      Style="{StaticResource MaterialDesignSwitchToggleButton}"/>
+                <TextBlock VerticalAlignment="Center"
+                   Margin="5,0,0,0"
+                   FontSize="14"
+                   Text="自動列印2"/>
+            </StackPanel>
+
+            <TextBox
+                Grid.Row="4"
+                Margin="10"
+                Grid.ColumnSpan="2"
+                Height="Auto"
+                materialDesign:HintAssist.Hint="歷程記錄"
+                AcceptsReturn="True"
+                IsReadOnly="True"
+                Text="{Binding PrintHistory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                TextWrapping="Wrap"
+                VerticalScrollBarVisibility="Auto"/>
+
+        </Grid>
+    </Grid>
+</Page>
