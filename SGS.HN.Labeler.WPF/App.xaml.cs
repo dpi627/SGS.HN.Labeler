@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SGS.HN.Labeler.Repository.Implement;
+using SGS.HN.Labeler.Repository.Interface;
 using SGS.HN.Labeler.Service.Implement;
 using SGS.HN.Labeler.Service.Interface;
 using SGS.HN.Labeler.WPF.Pages;
@@ -42,7 +44,9 @@ public partial class App : Application
 
                     // other services
                     services.AddSingleton<IExcelConfigService, ExcelConfigService>();
+                    services.AddSingleton<ISLService, SLService>();
                     services.AddSingleton<IDialogService, DialogService>();
+                    services.AddSingleton<IOrderSLRepository, OrderSLRepository>();
                 })
                 .Build();
     }
