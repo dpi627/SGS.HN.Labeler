@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using SGS.HN.Labeler.Service.Implement;
 using SGS.HN.Labeler.Service.Interface;
 using SGS.HN.Labeler.WPF.Service;
@@ -12,14 +13,23 @@ namespace SGS.HN.Labeler.WPF;
 /// </summary>
 public partial class App : Application
 {
-    public IServiceProvider ServiceProvider { get; }
+    public static IHost? AppHost { get; private set; }
 
     public App()
     {
-        var services = new ServiceCollection();
-        ConfigureServices(services);
-
-        ServiceProvider = services.BuildServiceProvider();
+        AppHost = Host.CreateDefaultBuilder()
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddSingleton<IExcelConfigService, ExcelConfigService>();
+                    services.AddTransient<IMainViewModel, MainViewModel>();
+                    services.AddSingleton<MainWindow>(p => new MainWindow
+                    {
+                        DataContext = p.GetRequiredService<IMainViewModel>()
+                    });
+                    // 添加其他服務...
+                    services.AddSingleton<IDialogService, DialogService>();
+                })
+                .Build();
     }
 
     private void ConfigureServices(IServiceCollection services)
@@ -34,10 +44,17 @@ public partial class App : Application
         services.AddSingleton<IDialogService, DialogService>();
     }
 
-    protected override void OnStartup(StartupEventArgs e)
+    protected override async void OnStartup(StartupEventArgs e)
     {
+        await AppHost!.StartAsync();
         base.OnStartup(e);
-        var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+        var mainWindow = AppHost.Services.GetRequiredService<MainWindow>();
         mainWindow.Show();
+    }
+
+    protected override async void OnExit(ExitEventArgs e)
+    {
+        await AppHost!.StopAsync();
+        base.OnExit(e);
     }
 }
