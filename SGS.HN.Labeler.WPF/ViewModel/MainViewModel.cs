@@ -24,7 +24,8 @@ public partial class MainViewModel : ObservableObject
     {
         NavigateToLabelPrintAsyncCommand = new AsyncRelayCommand(NavigateToLabelPrintAsync);
         NavigateToExcelConfigAsyncCommand = new AsyncRelayCommand(NavigateToExcelConfigAsync);
-        //NavigateToFeature1();
+
+        Task.Run(() => NavigateToLabelPrintAsync());
     }
 
     [RelayCommand]

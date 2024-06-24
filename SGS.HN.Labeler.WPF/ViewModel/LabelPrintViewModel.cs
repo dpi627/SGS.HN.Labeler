@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing.Printing;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Windows.Input;
 
 namespace SGS.HN.Labeler.WPF.ViewModel;
 
@@ -15,6 +16,7 @@ public partial class LabelPrintViewModel : ObservableObject
 {
     static private readonly string ExcelConfigDirectory = "ExcelConfig";
     private readonly IExcelConfigService _excelConfig;
+    private readonly ISLService _sl;
     private readonly IDialogService _dialog;
     private string ExcelConfigRoot;
 
@@ -68,9 +70,13 @@ public partial class LabelPrintViewModel : ObservableObject
         }
     }
 
-    public LabelPrintViewModel(IExcelConfigService ExcelConfig, IDialogService dialog)
+    public LabelPrintViewModel(
+        IExcelConfigService ExcelConfig,
+        ISLService SLService,
+        IDialogService dialog)
     {
         _excelConfig = ExcelConfig;
+        _sl = SLService;
         _dialog = dialog;
         SetExcelConfigRoot();
 
@@ -131,6 +137,10 @@ public partial class LabelPrintViewModel : ObservableObject
         Debug.WriteLine($"Selected Printer: {SelectedPrinter}");
         Debug.WriteLine($"Selected Excel Config: {SelectedExcelConfig}");
         Debug.WriteLine($"Order MID: {OrderMid}");
+
+
+
+
         //PrintHistory = $"Printed: {OrderMid} on {SelectedPrinter} with {SelectedExcelConfig.Text}\n{PrintHistory}";
         PrintHistory = $"Printed: {OrderMid}\n{PrintHistory}";
         IsClearButtonVisible = true;

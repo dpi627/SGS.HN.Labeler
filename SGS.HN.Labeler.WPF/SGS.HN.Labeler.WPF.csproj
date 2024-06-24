@@ -9,10 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="appsettings.json" />
     <None Remove="ExcelConfig\PrintInfo.xlsx" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ExcelConfig\PrintInfo.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -21,7 +25,6 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="MaterialDesignThemes" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>

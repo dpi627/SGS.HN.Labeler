@@ -118,11 +118,12 @@
                 <ToggleButton IsChecked="{Binding IsAutoPrint, Mode=TwoWay}"
                       Command="{Binding TogglePrintButtonCommand}"
                       CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
-                      Style="{StaticResource MaterialDesignSwitchToggleButton}"/>
+                      Style="{StaticResource MaterialDesignSwitchToggleButton}">
+                </ToggleButton>
                 <TextBlock VerticalAlignment="Center"
                    Margin="5,0,0,0"
                    FontSize="14"
-                   Text="自動列印2"/>
+                   Text="自動列印"/>
             </StackPanel>
 
             <TextBox
