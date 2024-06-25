@@ -63,7 +63,7 @@ public class ExcelConfigService : IExcelConfigService
             });
     }
 
-    public ResultModel DeleteExcelFile(string filePath)
+    public ResultModel Delete(string filePath)
     {
         try
         {

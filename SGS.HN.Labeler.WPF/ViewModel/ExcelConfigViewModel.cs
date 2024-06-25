@@ -1,6 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.VisualBasic.Logging;
+using SGS.HN.Labeler.Service.DTO.Info;
+using SGS.HN.Labeler.Service.DTO.ResultModel;
 using SGS.HN.Labeler.Service.Interface;
+using SGS.HN.Labeler.WPF.Service;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Forms;
@@ -11,17 +15,20 @@ public partial class ExcelConfigViewModel : ObservableObject
 {
     static private readonly string ExcelConfigDirectory = "ExcelConfig";
     private string? ExcelConfigRoot;
-
+    private readonly IDialogService _dialog;
     private readonly IExcelConfigService _excelService;
 
     [ObservableProperty]
-    private ObservableCollection<string> _excelFiles = [];
+    private ObservableCollection<ExcelConfigResultModel> _excelFiles = [];
 
     [ObservableProperty]
-    private string? _selectedFile;
+    private ExcelConfigResultModel? _selectedFile;
 
-    public ExcelConfigViewModel(IExcelConfigService _excelService)
+    public ExcelConfigViewModel(
+        IDialogService dialog,
+        IExcelConfigService _excelService)
     {
+        this._dialog = dialog;
         this._excelService = _excelService;
         SetExcelConfigRoot();
         LoadExcelFiles();
@@ -32,7 +39,7 @@ public partial class ExcelConfigViewModel : ObservableObject
         ExcelFiles.Clear();
         foreach (var file in _excelService.GetList(ExcelConfigRoot))
         {
-            ExcelFiles.Add(file.ConfigName);
+            ExcelFiles.Add(file);
         }
     }
 
@@ -47,18 +54,42 @@ public partial class ExcelConfigViewModel : ObservableObject
 
         if (openFileDialog.ShowDialog() == DialogResult.OK)
         {
-            //_excelService.ImportExcelFile(openFileDialog.FileName);
-            LoadExcelFiles();
+            string sourcePath = openFileDialog.FileName;
+            string fileName = Path.GetFileName(sourcePath);
+            string targetPath = Path.Combine(ExcelConfigRoot, fileName);
+            ExcelConfigImportInfo info = new(sourcePath, targetPath);
+            ResultModel result = _excelService.Import(info);
+            if (result.IsSuccess)
+            {
+                MessageBox.Show("Import Success");
+                //_log.LogInformation("Import {@info}", info);
+                LoadExcelFiles();
+            }
+            else
+            {
+                MessageBox.Show("Import Fail: " + result.Message);
+                //_log.LogError("Import Fail: {@info}\n{msg}", info, result.Message);
+            }
         }
     }
 
     [RelayCommand]
     private void DeleteExcel()
     {
-        if (SelectedFile != null)
+        if (SelectedFile == default)
         {
-            //_excelService.DeleteExcelFile(SelectedFile);
+            _dialog.ShowMessage("請選擇一個檔案");
+            return;
+        }
+
+        try
+        {
+            ResultModel? result = _excelService.Delete(SelectedFile.ConfigPath);
             LoadExcelFiles();
+        }
+        catch (Exception ex)
+        {
+            _dialog.ShowMessage(ex.Message);
         }
     }
 

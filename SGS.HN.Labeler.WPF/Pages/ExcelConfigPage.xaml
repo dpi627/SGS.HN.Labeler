@@ -11,7 +11,7 @@
       d:DesignHeight="600" d:DesignWidth="400" d:Background="#FFF"
       Title="ExcelConfigPage">
 
-    <Grid>
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
@@ -24,7 +24,13 @@
                   SelectionMode="Single"
                   SelectionUnit="FullRow">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Excel Files" Binding="{Binding}" Width="*"/>
+                <DataGridTextColumn Header="File Name"
+                    Binding="{Binding ConfigName}"
+                    Width="*"/>
+                <DataGridTextColumn Header="File Path"
+                    Binding="{Binding ConfigPath}"
+                    Width="2*"
+                    Visibility="Hidden"/>
             </DataGrid.Columns>
         </DataGrid>
 
