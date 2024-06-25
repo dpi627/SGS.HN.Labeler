@@ -38,13 +38,22 @@
             Margin="24">
         </TextBlock>
 
-        <Button Content="{Binding ButtonText}"
-            FontSize="16"
-            Grid.Column="1"
-            Grid.Row="2"
-            Style="{StaticResource MaterialDesignFlatMidBgButton}"
-            Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
-            Width="{StaticResource ButtonWidth}"/>
+        <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="{Binding OkButtonText}"
+                FontSize="16"
+                Style="{StaticResource MaterialDesignFlatMidBgButton}"
+                Command="{Binding OkCommand}"
+                Width="{StaticResource ButtonWidth}"
+                Visibility="{Binding IsOkButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+            <Button Content="{Binding CancelButtonText}"
+                FontSize="16"
+                Margin="10,0,0,0"
+                Style="{StaticResource MaterialDesignFlatMidBgButton}"
+                Command="{Binding CancelCommand}"
+                Width="{StaticResource ButtonWidth}"
+                Visibility="{Binding IsCancelButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        </StackPanel>
 
     </Grid>
 </UserControl>

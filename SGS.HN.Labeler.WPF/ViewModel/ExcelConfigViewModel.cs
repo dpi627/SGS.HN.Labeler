@@ -74,13 +74,18 @@ public partial class ExcelConfigViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void DeleteExcel()
+    private async Task DeleteExcel()
     {
         if (SelectedFile == default)
         {
             _dialog.ShowMessage("請選擇一個檔案");
             return;
         }
+
+        bool confirmDelete = await _dialog.ShowConfirmAsync("確認刪除?");
+
+        if (!confirmDelete)
+            return;
 
         try
         {
