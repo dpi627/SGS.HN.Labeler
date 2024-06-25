@@ -62,4 +62,23 @@ public class ExcelConfigService : IExcelConfigService
                 };
             });
     }
+
+    public ResultModel DeleteExcelFile(string filePath)
+    {
+        try
+        {
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+        }
+        catch (Exception ex)
+        {
+            return new ResultModel(
+                IsSuccess: false,
+                Message: ex.Message
+            );
+        }
+        return new ResultModel();
+    }
 }

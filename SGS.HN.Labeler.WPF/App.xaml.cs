@@ -43,12 +43,13 @@ public partial class App : Application
                 });
                 services.AddTransient(p => new ExcelConfigPage
                 {
-                    DataContext = p.GetRequiredService<LabelPrintViewModel>()
+                    DataContext = p.GetRequiredService<ExcelConfigViewModel>()
                 });
 
                 // view models
                 services.AddTransient<MainViewModel>();
                 services.AddTransient<LabelPrintViewModel>();
+                services.AddTransient<ExcelConfigViewModel>();
 
                 // other services
                 services.AddSingleton<IExcelConfigService, ExcelConfigService>();

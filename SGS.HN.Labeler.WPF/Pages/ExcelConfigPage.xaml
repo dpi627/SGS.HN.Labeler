@@ -1,14 +1,36 @@
 ﻿<Page x:Class="SGS.HN.Labeler.WPF.Pages.ExcelConfigPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:SGS.HN.Labeler.WPF.Pages"
-      mc:Ignorable="d" 
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:vm="clr-namespace:SGS.HN.Labeler.WPF.ViewModel"
+      d:DataContext="{d:DesignInstance Type=vm:ExcelConfigViewModel}"
+      mc:Ignorable="d"
       d:DesignHeight="600" d:DesignWidth="400" d:Background="#FFF"
       Title="ExcelConfigPage">
 
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <DataGrid ItemsSource="{Binding ExcelFiles}"
+                  SelectedItem="{Binding SelectedFile}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  SelectionMode="Single"
+                  SelectionUnit="FullRow">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Excel Files" Binding="{Binding}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+            <Button Content="Import" Command="{Binding ImportExcelCommand}" Margin="5"/>
+            <Button Content="Delete" Command="{Binding DeleteExcelCommand}" Margin="5"/>
+        </StackPanel>
     </Grid>
 </Page>
