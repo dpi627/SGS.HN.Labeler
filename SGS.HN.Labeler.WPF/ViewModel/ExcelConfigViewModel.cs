@@ -61,13 +61,13 @@ public partial class ExcelConfigViewModel : ObservableObject
             ResultModel result = _excelService.Import(info);
             if (result.IsSuccess)
             {
-                MessageBox.Show("Import Success");
+                _dialog.ShowMessage("匯入成功");
                 //_log.LogInformation("Import {@info}", info);
                 LoadExcelFiles();
             }
             else
             {
-                MessageBox.Show("Import Fail: " + result.Message);
+                _dialog.ShowMessage($"匯入失敗:\n{result.Message}");
                 //_log.LogError("Import Fail: {@info}\n{msg}", info, result.Message);
             }
         }

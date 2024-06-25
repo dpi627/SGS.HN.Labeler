@@ -153,7 +153,7 @@ public partial class LabelPrintViewModel : ObservableObject
 
         if (!slResult.Any())
         {
-            _dialog.ShowMessage("查無資料");
+            _dialog.ShowMessage("查無資料", isAutoClose: true);
             return;
         }
 
@@ -199,6 +199,7 @@ public partial class LabelPrintViewModel : ObservableObject
         //PrintHistory = $"Printed: {OrderMid}\n{PrintHistory}";
         IsClearButtonVisible = true;
         OrderMid = string.Empty;
+        OrdMidFocused?.Invoke();
     }
 
     private static void SetLabel(BarCodeType type, string orderNo, string printInfo, int labelCount = 0)
@@ -233,9 +234,9 @@ public partial class LabelPrintViewModel : ObservableObject
     private static void SetContent(PrintParam pp, int offsetX, int offsetY)
     {
         TSC.Barcode(offsetX, offsetY, pp.Barcode, height: 45);
-        TSC.Qrcode(offsetX, offsetY + 55, pp.Qrcode);
-        TSC.WindowsFont(offsetX + 55, offsetY + 50, pp.OrdMid, 24, "Consolas");
-        TSC.WindowsFont(offsetX + 55, offsetY + 70, pp.PrintInfo, 24, "Consolas");
+        TSC.Qrcode(offsetX, offsetY + 50, pp.Qrcode);
+        TSC.WindowsFont(offsetX + 55, offsetY + 45, pp.OrdMid, 32, "Consolas");
+        TSC.WindowsFont(offsetX + 55, offsetY + 70, pp.PrintInfo, 32, "Consolas");
     }
 
     [RelayCommand]

@@ -9,7 +9,7 @@
              d:DataContext="{d:DesignInstance Type=vm:DialogViewModel}"
              MinWidth="250" MinHeight="150">
 
-    <Grid Margin="10, 30, 10, 30">
+    <Grid Margin="10, 20, 10, 30">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5*"/>
@@ -21,6 +21,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <materialDesign:PackIcon Kind="AlertOctagram"
@@ -29,18 +30,29 @@
             Foreground="{StaticResource MaterialDesign.Brush.Primary}"
             HorizontalAlignment="Center"
             Grid.Column="1"
-            Grid.Row="0"/>
+            Grid.Row="1"/>
+
+        <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                     Value="{Binding CountdownProgress}"
+                     HorizontalAlignment="Right"
+                     IsIndeterminate="False"
+                     Grid.Column="1" Grid.Row="0"
+                     Width="20" Height="20"
+                     Visibility="{Binding IsAutoClose, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
         <TextBlock Text="{Binding Message}"
                    HorizontalAlignment="Center"
             TextWrapping="Wrap"
             FontSize="16"
             Grid.Column="1"
-            Grid.Row="1"
+            Grid.Row="2"
             Margin="24">
         </TextBlock>
 
-        <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+        <StackPanel Grid.Column="1"
+                    Grid.Row="3"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center">
             <Button Content="{Binding OkButtonText}"
                 FontSize="16"
                 Style="{StaticResource MaterialDesignFlatMidBgButton}"
