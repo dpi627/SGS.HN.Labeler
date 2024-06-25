@@ -1,12 +1,18 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.VisualBasic.Logging;
+using SGS.HN.Labeler.Service.DTO.Info;
+using SGS.HN.Labeler.Service.DTO.ResultModel;
+using SGS.HN.Labeler.Service.Enum;
 using SGS.HN.Labeler.Service.Interface;
 using SGS.HN.Labeler.WPF.Model;
 using SGS.HN.Labeler.WPF.Service;
+using SGS.OAD.TscPrinter;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing.Printing;
 using System.IO;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
 
@@ -138,17 +144,102 @@ public partial class LabelPrintViewModel : ObservableObject
         Debug.WriteLine($"Selected Excel Config: {SelectedExcelConfig}");
         Debug.WriteLine($"Order MID: {OrderMid}");
 
+        // 讀取 Excel 設定檔，取得列印資訊
+        IEnumerable<PrintInfoResultModel>? excelPrintInfo = _excelConfig.Load(SelectedExcelConfig.Value);
 
+        // 依照訂單區間，取得訂單所有SL
+        SLInfo slInfo = new(){ OrderNoStart = OrderMid };
+        IEnumerable<SLResultModel>? slResult = _sl.Query(slInfo);
 
+        if (!slResult.Any())
+        {
+            _dialog.ShowMessage("查無資料");
+            return;
+        }
+
+        TSC.Build(SelectedPrinter, 73, 15);
+
+        try
+        {
+            int labelCount = 0;
+            foreach (var sl in slResult)
+            {
+                PrintInfoResultModel? printInfoRow = excelPrintInfo
+                    .Where(pi => pi.ServiceLineId == sl.ServiceLineId)
+                    .FirstOrDefault();
+
+                if (printInfoRow != null)
+                {
+                    foreach (string? printInfo in printInfoRow.PrintInfo)
+                    {
+                        labelCount++;
+                        PrintHistory = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} Printed: {OrderMid}\n{PrintHistory}";
+                        SetLabel(printInfoRow.BarCodeType, sl.OrderMid!, printInfo!, labelCount);
+
+                        if (labelCount % 2 == 0)
+                            TSC.Print();
+                    }
+                }
+            }
+            //檢查如果labelCount是奇數，表示最後一筆資料只有一張標籤，需再列印一次
+            if (labelCount % 2 != 0)
+                TSC.Print();
+        }
+        catch (Exception ex)
+        {
+            //_log.LogError(ex, "Print Fail");
+            _dialog.ShowMessage(ex.Message);
+        }
+        finally
+        {
+            TSC.Dispose();
+        }
 
         //PrintHistory = $"Printed: {OrderMid} on {SelectedPrinter} with {SelectedExcelConfig.Text}\n{PrintHistory}";
-        PrintHistory = $"Printed: {OrderMid}\n{PrintHistory}";
+        //PrintHistory = $"Printed: {OrderMid}\n{PrintHistory}";
         IsClearButtonVisible = true;
         OrderMid = string.Empty;
     }
 
+    private static void SetLabel(BarCodeType type, string orderNo, string printInfo, int labelCount = 0)
+    {
+        PrintParam pp = SetPrintParam(type, orderNo, printInfo);
+        if (labelCount % 2 != 0)
+            SetContent(pp, 10, 10);
+        else
+            SetContent(pp, 314, 10);
+    }
+
+    /// <summary>
+    /// 列印參數處理，例如資料串接
+    /// </summary>
+    /// <param name="OrdMid">訂單編號</param>
+    /// <param name="PrintInfo">列印資訊</param>
+    /// <param name="OnlyOrdMid">是否只包含訂單編號</param>
+    /// <returns></returns>
+    private static PrintParam SetPrintParam(BarCodeType type, string OrdMid, string PrintInfo)
+    {
+        var qrcode = type == BarCodeType.WithPrintInfo ? OrdMid : $"{OrdMid}-{PrintInfo}";
+        var barcode = type == BarCodeType.WithPrintInfo ? OrdMid : qrcode;
+        return new PrintParam(OrdMid, PrintInfo, qrcode, barcode);
+    }
+
+    /// <summary>
+    /// 設定列印內容與座標
+    /// </summary>
+    /// <param name="pp">列印參數</param>
+    /// <param name="offsetX">X座標位移</param>
+    /// <param name="offsetY">Y座標位移</param>
+    private static void SetContent(PrintParam pp, int offsetX, int offsetY)
+    {
+        TSC.Barcode(offsetX, offsetY, pp.Barcode, height: 45);
+        TSC.Qrcode(offsetX, offsetY + 55, pp.Qrcode);
+        TSC.WindowsFont(offsetX + 55, offsetY + 50, pp.OrdMid, 24, "Consolas");
+        TSC.WindowsFont(offsetX + 55, offsetY + 70, pp.PrintInfo, 24, "Consolas");
+    }
+
     [RelayCommand]
-    private async void OrderMidEnter()
+    private async Task OrderMidEnter()
     {
         Debug.WriteLine(OrderMid);
 

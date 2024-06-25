@@ -6,7 +6,8 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:vm="clr-namespace:SGS.HN.Labeler.WPF.ViewModel"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance Type=vm:DialogViewModel}">
+             d:DataContext="{d:DesignInstance Type=vm:DialogViewModel}"
+             MinWidth="250" MinHeight="150">
 
     <Grid Margin="10, 30, 10, 30">
 
@@ -31,6 +32,7 @@
             Grid.Row="0"/>
 
         <TextBlock Text="{Binding Message}"
+                   HorizontalAlignment="Center"
             TextWrapping="Wrap"
             FontSize="16"
             Grid.Column="1"
