@@ -8,7 +8,7 @@
         d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
         mc:Ignorable="d"
         Style="{StaticResource MaterialDesignWindow}"
-        Title="MainWindow" Height="600" Width="460">
+        Title="MainWindow" Height="600" Width="460" Icon="/barcode.ico">
     <materialDesign:DialogHost Identifier="RootDialog">
         <Grid>
             <Grid.RowDefinitions>
