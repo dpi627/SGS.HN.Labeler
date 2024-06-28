@@ -28,6 +28,7 @@ public partial class App : Application
             {
                 config.SetBasePath(System.AppContext.BaseDirectory);
                 config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                config.AddUserSecrets<App>();
             })
             .ConfigureServices((hostContext, services) =>
             {
