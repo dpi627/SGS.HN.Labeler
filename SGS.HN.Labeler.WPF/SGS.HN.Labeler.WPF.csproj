@@ -17,19 +17,23 @@
   <ItemGroup>
     <None Remove="appsettings.json" />
     <None Remove="ExcelConfig\PrintInfo.xlsx" />
+    <None Remove="ExcelConfig\標籤列印格式對照.xlsx" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ExcelConfig\PrintInfo.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExcelConfig\標籤列印格式對照.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="AssemblyInfo.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="barcode.ico" />
-    <Content Include="ExcelConfig\PrintInfo.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>

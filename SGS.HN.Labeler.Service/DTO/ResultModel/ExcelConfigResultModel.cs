@@ -4,5 +4,6 @@
     {
         public string? ConfigName { get; set; }
         public string? ConfigPath { get; set; }
+        public DateTime LastModified { get; set; }
     }
 }

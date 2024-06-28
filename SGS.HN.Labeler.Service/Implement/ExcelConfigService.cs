@@ -11,8 +11,10 @@ public class ExcelConfigService : IExcelConfigService
             .Select(filePath => new ExcelConfigResultModel
             {
                 ConfigName = Path.GetFileNameWithoutExtension(filePath),
-                ConfigPath = filePath
-            });
+                ConfigPath = filePath,
+                LastModified = File.GetLastWriteTime(filePath)
+            })
+            .OrderByDescending(f => f.LastModified);
         return files;
     }
 
