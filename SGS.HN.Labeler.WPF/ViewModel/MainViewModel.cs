@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using SGS.HN.Labeler.WPF.Helper;
 using SGS.HN.Labeler.WPF.Pages;
+using System.Reflection;
 using System.Windows.Controls;
 
 namespace SGS.HN.Labeler.WPF.ViewModel;
@@ -17,6 +19,9 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private bool _isLoading;
 
+    [ObservableProperty]
+    private string? _windowTitle;
+
     public IAsyncRelayCommand NavigateToLabelPrintAsyncCommand { get; }
     public IAsyncRelayCommand NavigateToExcelConfigAsyncCommand { get; }
 
@@ -24,6 +29,7 @@ public partial class MainViewModel : ObservableObject
     {
         NavigateToLabelPrintAsyncCommand = new AsyncRelayCommand(NavigateToLabelPrintAsync);
         NavigateToExcelConfigAsyncCommand = new AsyncRelayCommand(NavigateToExcelConfigAsync);
+        WindowTitle = $"{AppDomain.CurrentDomain.FriendlyName} - {VersionHelper.GetApplicationVersion()}";
 
         Task.Run(() => NavigateToLabelPrintAsync());
     }

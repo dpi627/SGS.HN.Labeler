@@ -8,7 +8,7 @@
         d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
         mc:Ignorable="d"
         Style="{StaticResource MaterialDesignWindow}"
-        Title="SGS.HN.Labeler"
+        Title="{Binding WindowTitle}"
         Height="600"
         Width="460"
         MinHeight="600"
