@@ -220,8 +220,8 @@ public partial class LabelPrintViewModel : ObservableObject
     /// <returns></returns>
     private static PrintParam SetPrintParam(BarCodeType type, string OrdMid, string PrintInfo)
     {
-        var qrcode = type == BarCodeType.WithPrintInfo ? OrdMid : $"{OrdMid}-{PrintInfo}";
-        var barcode = type == BarCodeType.WithPrintInfo ? OrdMid : qrcode;
+        var qrcode = type == BarCodeType.OrderNoOnly ? OrdMid : $"{OrdMid}-{PrintInfo}";
+        var barcode = type == BarCodeType.OrderNoOnly ? OrdMid : qrcode;
         return new PrintParam(OrdMid, PrintInfo, qrcode, barcode);
     }
 
