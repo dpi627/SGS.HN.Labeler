@@ -235,9 +235,18 @@ public partial class LabelPrintViewModel : ObservableObject
     {
         TSC.Barcode(offsetX, offsetY, pp.Barcode, height: 45);
         TSC.Qrcode(offsetX, offsetY + 50, pp.Qrcode);
-        TSC.WindowsFont(offsetX + 55, offsetY + 45, pp.OrdMid, 32, "Consolas");
-        TSC.WindowsFont(offsetX + 55, offsetY + 70, pp.PrintInfo, 32, "Consolas");
+        TSC.WindowsFont(offsetX + 55, offsetY + 45, PadLeft(pp.OrdMid), 32, "Consolas");
+        TSC.WindowsFont(offsetX + 55, offsetY + 70, PadLeft(pp.PrintInfo), 32, "Consolas");
     }
+
+    /// <summary>
+    /// 左邊填充空白，製造靠右對齊效果
+    /// </summary>
+    /// <param name="input"></param>
+    /// <param name="len"></param>
+    /// <returns></returns>
+    private static string PadLeft(string input, int len = 14) => 
+        string.IsNullOrEmpty(input) ? "" : input.PadLeft(len);
 
     [RelayCommand]
     private async Task OrderMidEnter()
