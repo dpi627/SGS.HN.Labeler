@@ -165,7 +165,7 @@ public partial class LabelPrintViewModel : ObservableObject
             foreach (var sl in slResult)
             {
                 PrintInfoResultModel? printInfoRow = excelPrintInfo
-                    .Where(pi => pi.ServiceLineId == sl.ServiceLineId)
+                    .Where(pi => pi.ServiceLineId.Trim() == sl.ServiceLineId)
                     .FirstOrDefault();
 
                 if (printInfoRow != null)
@@ -178,9 +178,9 @@ public partial class LabelPrintViewModel : ObservableObject
 
                         if (labelCount % 2 == 0)
                             TSC.Print();
+                        }
                     }
                 }
-            }
             //檢查如果labelCount是奇數，表示最後一筆資料只有一張標籤，需再列印一次
             if (labelCount % 2 != 0)
                 TSC.Print();
@@ -206,9 +206,9 @@ public partial class LabelPrintViewModel : ObservableObject
     {
         PrintParam pp = SetPrintParam(type, orderNo, printInfo);
         if (labelCount % 2 != 0)
-            SetContent(pp, 10, 10);
+            SetContent(pp, 10, 10, type);
         else
-            SetContent(pp, 314, 10);
+            SetContent(pp, 314, 10, type);
     }
 
     /// <summary>
@@ -220,6 +220,8 @@ public partial class LabelPrintViewModel : ObservableObject
     /// <returns></returns>
     private static PrintParam SetPrintParam(BarCodeType type, string OrdMid, string PrintInfo)
     {
+        OrdMid = OrdMid.Trim();
+        PrintInfo = PrintInfo.Trim();
         var qrcode = type == BarCodeType.OrderNoOnly ? OrdMid : $"{OrdMid}-{PrintInfo}";
         var barcode = type == BarCodeType.OrderNoOnly ? OrdMid : qrcode;
         return new PrintParam(OrdMid, PrintInfo, qrcode, barcode);
@@ -231,12 +233,14 @@ public partial class LabelPrintViewModel : ObservableObject
     /// <param name="pp">列印參數</param>
     /// <param name="offsetX">X座標位移</param>
     /// <param name="offsetY">Y座標位移</param>
-    private static void SetContent(PrintParam pp, int offsetX, int offsetY)
+    private static void SetContent(PrintParam pp, int offsetX, int offsetY, BarCodeType type)
     {
+        int qrOffset = type == BarCodeType.OrderNoOnly ? 15 : 0; //純印訂單編號QR比較小，靠右多10
+
         TSC.Barcode(offsetX, offsetY, pp.Barcode, height: 45);
-        TSC.Qrcode(offsetX, offsetY + 50, pp.Qrcode);
-        TSC.WindowsFont(offsetX + 55, offsetY + 45, PadLeft(pp.OrdMid), 32, "Consolas");
-        TSC.WindowsFont(offsetX + 55, offsetY + 70, PadLeft(pp.PrintInfo), 32, "Consolas");
+        TSC.Qrcode(offsetX + 205 + qrOffset, offsetY + 50, pp.Qrcode);
+        TSC.WindowsFont(offsetX, offsetY + 45, pp.OrdMid, 32, "Consolas");
+        TSC.WindowsFont(offsetX, offsetY + 70, pp.PrintInfo, 32, "Consolas");
     }
 
     /// <summary>
@@ -245,7 +249,7 @@ public partial class LabelPrintViewModel : ObservableObject
     /// <param name="input"></param>
     /// <param name="len"></param>
     /// <returns></returns>
-    private static string PadLeft(string input, int len = 14) => 
+    private static string PadLeft(string input, int len = 14) =>
         string.IsNullOrEmpty(input) ? "" : input.PadLeft(len);
 
     [RelayCommand]
