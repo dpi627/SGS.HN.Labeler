@@ -147,8 +147,14 @@ public partial class LabelPrintViewModel : ObservableObject
         // 讀取 Excel 設定檔，取得列印資訊
         IEnumerable<PrintInfoResultModel>? excelPrintInfo = _excelConfig.Load(SelectedExcelConfig.Value);
 
+        if (excelPrintInfo == null)
+        {
+            _dialog.ShowMessage("讀取Excel設定檔失敗", isAutoClose: true);
+            return;
+        }
+
         // 依照訂單區間，取得訂單所有SL
-        SLInfo slInfo = new(){ OrderNoStart = OrderMid };
+        SLInfo slInfo = new() { OrderNoStart = OrderMid };
         IEnumerable<SLResultModel>? slResult = _sl.Query(slInfo);
 
         if (!slResult.Any())
@@ -158,6 +164,8 @@ public partial class LabelPrintViewModel : ObservableObject
         }
 
         TSC.Build(SelectedPrinter, 73, 15);
+
+        bool IsTest = false; //測試模式使用，避免直接列印浪費紙，或甚至沒接印表機
 
         try
         {
@@ -173,16 +181,16 @@ public partial class LabelPrintViewModel : ObservableObject
                     foreach (string? printInfo in printInfoRow.PrintInfo)
                     {
                         labelCount++;
-                        PrintHistory = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} Printed: {OrderMid}\n{PrintHistory}";
+                        PrintHistory = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} Printed: {OrderMid}:{printInfo}\n{PrintHistory}";
                         SetLabel(printInfoRow.BarCodeType, sl.OrderMid!, printInfo!, labelCount);
 
-                        if (labelCount % 2 == 0)
+                        if (labelCount % 2 == 0 && !IsTest)
                             TSC.Print();
-                        }
                     }
                 }
+            }
             //檢查如果labelCount是奇數，表示最後一筆資料只有一張標籤，需再列印一次
-            if (labelCount % 2 != 0)
+            if (labelCount % 2 != 0 && !IsTest)
                 TSC.Print();
         }
         catch (Exception ex)
