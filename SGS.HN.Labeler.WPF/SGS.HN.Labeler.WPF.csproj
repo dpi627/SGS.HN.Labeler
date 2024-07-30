@@ -16,12 +16,16 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="ExcelConfig\240722.xlsx" />
     <None Remove="ExcelConfig\PrintInfo.xlsx" />
     <None Remove="ExcelConfig\標籤列印格式對照.xlsx" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExcelConfig\240722.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ExcelConfig\PrintInfo.xlsx">

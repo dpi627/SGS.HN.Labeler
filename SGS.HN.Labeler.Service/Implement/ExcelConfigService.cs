@@ -49,18 +49,26 @@ public class ExcelConfigService : IExcelConfigService
         var excelFile = MiniExcel.Query(filePath);
         return excelFile
             .Skip(2)
-            .Select(row =>
+            .SelectMany(row =>
             {
+                if (string.IsNullOrWhiteSpace(row.A?.ToString()) || row.C == null)
+                {
+                    return Enumerable.Empty<PrintInfoResultModel>();
+                }
+
                 var rowDict = (IDictionary<string, object>)row;
-                return new PrintInfoResultModel
+                return new[]
+                {
+                new PrintInfoResultModel
                 {
                     ServiceLineId = row.A.ToString(),
                     BarCodeType = (BarCodeType)row.C,
                     PrintInfo = rowDict
                         .Skip(3)
                         .Select(cell => cell.Value?.ToString())
-                        .Where(value => value != null)
+                        .Where(value => !string.IsNullOrWhiteSpace(value))
                         .ToArray()
+                }
                 };
             });
     }
