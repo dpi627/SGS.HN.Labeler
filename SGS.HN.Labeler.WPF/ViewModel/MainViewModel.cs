@@ -29,7 +29,7 @@ public partial class MainViewModel : ObservableObject
     {
         NavigateToLabelPrintAsyncCommand = new AsyncRelayCommand(NavigateToLabelPrintAsync);
         NavigateToExcelConfigAsyncCommand = new AsyncRelayCommand(NavigateToExcelConfigAsync);
-        WindowTitle = $"{AppDomain.CurrentDomain.FriendlyName} - {VersionHelper.GetApplicationVersion()}";
+        WindowTitle = $"{AppDomain.CurrentDomain.FriendlyName} - {VersionHelper.CurrentVersion}";
 
         Task.Run(() => NavigateToLabelPrintAsync());
     }
