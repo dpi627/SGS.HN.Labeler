@@ -79,8 +79,12 @@ public partial class App : Application
             builder.Services.AddSingleton<IDialogService, DialogService>();
             builder.Services.AddSingleton<IOrderSLRepository, OrderSLRepository>();
 
-            builder.Services.AddDbContext<LIMS20_UATContext>(options =>
-                options.UseSqlServer(GetConnectionString(builder.Configuration.GetSection(nameof(DbInfo)).Get<DbInfo>()))//builder.Configuration.GetConnectionString("DefaultConnection"))
+            builder.Services.AddDbContext<LIMS20_UATContext>(async options =>
+                {
+                    var dbInfo = builder.Configuration.GetSection(nameof(DbInfo)).Get<DbInfo>();
+                    var connectionString = await GetConnectionString(dbInfo);
+                    options.UseSqlServer(connectionString);
+                }
             );
         }
         catch (Exception ex)
@@ -91,14 +95,17 @@ public partial class App : Application
         AppHost = builder.Build();
     }
 
-    private string GetConnectionString(DbInfo db)
+    private async Task<string> GetConnectionString(DbInfo db)
     {
-        return DbInfoBuilder.Init()
+        Log.Information("Get Connection String {Server}.{Database}", db.Server, db.Database);
+
+        var dbInfo = await DbInfoBuilder.Init()
             .SetServer(db.Server)
             .SetDatabase(db.Database)
             .SetAppName(_appName)
-            .Build()
-            .ConnectionString;
+            .BuildAsync();
+
+        return dbInfo.ConnectionString;
     }
 
     protected override async void OnStartup(StartupEventArgs e)
