@@ -13,6 +13,7 @@ using SGS.HN.Labeler.WPF.Helper;
 using SGS.HN.Labeler.WPF.Pages;
 using SGS.HN.Labeler.WPF.Service;
 using SGS.HN.Labeler.WPF.ViewModel;
+using SGS.OAD.DB;
 using System.Windows;
 
 namespace SGS.HN.Labeler.WPF;
@@ -79,7 +80,7 @@ public partial class App : Application
             builder.Services.AddSingleton<IOrderSLRepository, OrderSLRepository>();
 
             builder.Services.AddDbContext<LIMS20_UATContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+                options.UseSqlServer(GetConnectionString(builder.Configuration.GetSection(nameof(DbInfo)).Get<DbInfo>()))//builder.Configuration.GetConnectionString("DefaultConnection"))
             );
         }
         catch (Exception ex)
@@ -88,6 +89,16 @@ public partial class App : Application
         }
 
         AppHost = builder.Build();
+    }
+
+    private string GetConnectionString(DbInfo db)
+    {
+        return DbInfoBuilder.Init()
+            .SetServer(db.Server)
+            .SetDatabase(db.Database)
+            .SetAppName(_appName)
+            .Build()
+            .ConnectionString;
     }
 
     protected override async void OnStartup(StartupEventArgs e)
