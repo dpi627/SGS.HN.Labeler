@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.VisualBasic.Logging;
+using Microsoft.Extensions.Logging;
 using SGS.HN.Labeler.Service.DTO.Info;
 using SGS.HN.Labeler.Service.DTO.ResultModel;
 using SGS.HN.Labeler.Service.Interface;
@@ -17,6 +17,7 @@ public partial class ExcelConfigViewModel : ObservableObject
     private string? ExcelConfigRoot;
     private readonly IDialogService _dialog;
     private readonly IExcelConfigService _excelService;
+    private readonly ILogger _logger;
 
     [ObservableProperty]
     private ObservableCollection<ExcelConfigResultModel> _excelFiles = [];
@@ -26,10 +27,12 @@ public partial class ExcelConfigViewModel : ObservableObject
 
     public ExcelConfigViewModel(
         IDialogService dialog,
-        IExcelConfigService _excelService)
+        IExcelConfigService _excelService,
+        ILogger<ExcelConfigViewModel> logger)
     {
         this._dialog = dialog;
         this._excelService = _excelService;
+        this._logger = logger;
         SetExcelConfigRoot();
         LoadExcelFiles();
     }
@@ -41,6 +44,7 @@ public partial class ExcelConfigViewModel : ObservableObject
         {
             ExcelFiles.Add(file);
         }
+        _logger.LogInformation("Load Excel Files: {@ExcelFiles}", ExcelFiles);
     }
 
     [RelayCommand]
@@ -61,14 +65,14 @@ public partial class ExcelConfigViewModel : ObservableObject
             ResultModel result = _excelService.Import(info);
             if (result.IsSuccess)
             {
+                _logger.LogInformation("Import Success: {@info}", info);
                 _dialog.ShowMessage("匯入成功");
-                //_log.LogInformation("Import {@info}", info);
                 LoadExcelFiles();
             }
             else
             {
+                _logger.LogError("Import Fail: {@info}\n{msg}", info, result.Message);
                 _dialog.ShowMessage($"匯入失敗:\n{result.Message}");
-                //_log.LogError("Import Fail: {@info}\n{msg}", info, result.Message);
             }
         }
     }
@@ -90,10 +94,12 @@ public partial class ExcelConfigViewModel : ObservableObject
         try
         {
             ResultModel? result = _excelService.Delete(SelectedFile.ConfigPath);
+            _logger.LogInformation("Delete Excel: {@SelectedFile}", SelectedFile);
             LoadExcelFiles();
         }
         catch (Exception ex)
         {
+            _logger.LogError("Delete Excel Fail: {@SelectedFile}\n{msg}", SelectedFile, ex.Message);
             _dialog.ShowMessage(ex.Message);
         }
     }

@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.VisualBasic.Logging;
+using Microsoft.Extensions.Logging;
 using SGS.HN.Labeler.Service.DTO.Info;
 using SGS.HN.Labeler.Service.DTO.ResultModel;
 using SGS.HN.Labeler.Service.Enum;
@@ -12,9 +12,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing.Printing;
 using System.IO;
-using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Windows.Input;
 
 namespace SGS.HN.Labeler.WPF.ViewModel;
 
@@ -25,6 +23,7 @@ public partial class LabelPrintViewModel : ObservableObject
     private readonly ISLService _sl;
     private readonly IDialogService _dialog;
     private string ExcelConfigRoot;
+    private ILogger _logger;
 
     [ObservableProperty]
     private ObservableCollection<string> printers;
@@ -79,11 +78,14 @@ public partial class LabelPrintViewModel : ObservableObject
     public LabelPrintViewModel(
         IExcelConfigService ExcelConfig,
         ISLService SLService,
-        IDialogService dialog)
+        IDialogService dialog,
+        ILogger<LabelPrintViewModel> logger)
     {
         _excelConfig = ExcelConfig;
         _sl = SLService;
         _dialog = dialog;
+        _logger = logger;
+
         SetExcelConfigRoot();
 
         var data = _excelConfig
@@ -91,10 +93,14 @@ public partial class LabelPrintViewModel : ObservableObject
             .Select(x => new ComboBoxItem(x.ConfigName, x.ConfigPath));
         ExcelConfigs = new ObservableCollection<ComboBoxItem>(data);
 
+        _logger.LogInformation("Set Excels: {@ExcelConfigs}", ExcelConfigs);
+
         Printers = new ObservableCollection<string>(
             PrinterSettings.InstalledPrinters
                            .Cast<string>()
                            .Where(x => x.StartsWith("TSC")));
+
+        _logger.LogInformation("Set Printers: {@Printers}", Printers);
 
         // 預設第一台印表機
         if (Printers.Any())
@@ -150,6 +156,7 @@ public partial class LabelPrintViewModel : ObservableObject
         if (excelPrintInfo == null)
         {
             _dialog.ShowMessage("讀取Excel設定檔失敗", isAutoClose: true);
+            _logger.LogError("Load Excel Config Fail: {ExcelConfig}", SelectedExcelConfig);
             return;
         }
 
@@ -160,6 +167,7 @@ public partial class LabelPrintViewModel : ObservableObject
         if (!slResult.Any())
         {
             _dialog.ShowMessage("查無資料", isAutoClose: true);
+            _logger.LogWarning("No Data Found: {OrderMid}", OrderMid);
             return;
         }
 
@@ -167,8 +175,11 @@ public partial class LabelPrintViewModel : ObservableObject
 
         bool IsTest = false; //測試模式使用，避免直接列印浪費紙，或甚至沒接印表機
 
+        _logger.LogInformation("Build Printer: {SelectedPrinter} (Test Mode: {IsTest})", SelectedPrinter, IsTest);
+
         try
         {
+            _logger.LogInformation("Print Start: {OrderMid}", OrderMid);
             int labelCount = 0;
             foreach (var sl in slResult)
             {
@@ -181,7 +192,11 @@ public partial class LabelPrintViewModel : ObservableObject
                     foreach (string? printInfo in printInfoRow.PrintInfo)
                     {
                         labelCount++;
+
                         PrintHistory = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} Printed: {OrderMid}:{printInfo}\n{PrintHistory}";
+
+                        _logger.LogInformation("Set Label {OrderNo} {PrintInfo}", OrderMid, printInfo);
+
                         SetLabel(printInfoRow.BarCodeType, sl.OrderMid!, printInfo!, labelCount);
 
                         if (labelCount % 2 == 0 && !IsTest)
@@ -195,12 +210,13 @@ public partial class LabelPrintViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            //_log.LogError(ex, "Print Fail");
+            _logger.LogError(ex, "Print Fail: {OrderMid}", OrderMid);
             _dialog.ShowMessage(ex.Message);
         }
         finally
         {
             TSC.Dispose();
+            _logger.LogInformation("Print End: {OrderMid}", OrderMid);
         }
 
         //PrintHistory = $"Printed: {OrderMid} on {SelectedPrinter} with {SelectedExcelConfig.Text}\n{PrintHistory}";
