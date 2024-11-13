@@ -79,10 +79,10 @@ public partial class App : Application
             builder.Services.AddSingleton<IDialogService, DialogService>();
             builder.Services.AddSingleton<IOrderSLRepository, OrderSLRepository>();
 
-            builder.Services.AddDbContext<LIMS20_UATContext>(async options =>
+            builder.Services.AddDbContext<LIMS20_UATContext>(options =>
                 {
                     var dbInfo = builder.Configuration.GetSection(nameof(DbInfo)).Get<DbInfo>();
-                    var connectionString = await GetConnectionString(dbInfo);
+                    var connectionString = GetConnectionString(dbInfo);
                     options.UseSqlServer(connectionString);
                 }
             );
@@ -95,15 +95,15 @@ public partial class App : Application
         AppHost = builder.Build();
     }
 
-    private async Task<string> GetConnectionString(DbInfo db)
+    private static string GetConnectionString(DbInfo db)
     {
         Log.Information("Get Connection String {Server}.{Database}", db.Server, db.Database);
 
-        var dbInfo = await DbInfoBuilder.Init()
+        var dbInfo = DbInfoBuilder.Init()
             .SetServer(db.Server)
             .SetDatabase(db.Database)
             .SetAppName(_appName)
-            .BuildAsync();
+            .Build();
 
         return dbInfo.ConnectionString;
     }
