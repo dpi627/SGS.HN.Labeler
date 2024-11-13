@@ -24,6 +24,8 @@ public partial class LabelPrintViewModel : ObservableObject
     private readonly IDialogService _dialog;
     private string ExcelConfigRoot;
     private ILogger _logger;
+    private Stopwatch _watchPrint = new();
+    private bool _isTest = false; //測試模式使用，避免直接列印浪費紙，或甚至沒接印表機
 
     [ObservableProperty]
     private ObservableCollection<string> printers;
@@ -81,6 +83,9 @@ public partial class LabelPrintViewModel : ObservableObject
         IDialogService dialog,
         ILogger<LabelPrintViewModel> logger)
     {
+#if DEBUG
+        _isTest = true;
+#endif
         _excelConfig = ExcelConfig;
         _sl = SLService;
         _dialog = dialog;
@@ -171,11 +176,10 @@ public partial class LabelPrintViewModel : ObservableObject
             return;
         }
 
+        _watchPrint.Restart();
         TSC.Build(SelectedPrinter, 73, 15);
 
-        bool IsTest = false; //測試模式使用，避免直接列印浪費紙，或甚至沒接印表機
-
-        _logger.LogInformation("Build Printer: {SelectedPrinter} (Test Mode: {IsTest})", SelectedPrinter, IsTest);
+        _logger.LogInformation("Build Printer: {SelectedPrinter} (Test Mode: {IsTest})", SelectedPrinter, _isTest);
 
         try
         {
@@ -191,21 +195,21 @@ public partial class LabelPrintViewModel : ObservableObject
                 {
                     foreach (string? printInfo in printInfoRow.PrintInfo)
                     {
+                        _logger.LogInformation("Set Label #{Seq} {OrderNo} {PrintInfo}", labelCount, OrderMid, printInfo);
+
                         labelCount++;
 
                         PrintHistory = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} Printed: {OrderMid}:{printInfo}\n{PrintHistory}";
 
-                        _logger.LogInformation("Set Label {OrderNo} {PrintInfo}", OrderMid, printInfo);
-
                         SetLabel(printInfoRow.BarCodeType, sl.OrderMid!, printInfo!, labelCount);
 
-                        if (labelCount % 2 == 0 && !IsTest)
+                        if (labelCount % 2 == 0 && !_isTest)
                             TSC.Print();
                     }
                 }
             }
             //檢查如果labelCount是奇數，表示最後一筆資料只有一張標籤，需再列印一次
-            if (labelCount % 2 != 0 && !IsTest)
+            if (labelCount % 2 != 0 && !_isTest)
                 TSC.Print();
         }
         catch (Exception ex)
@@ -216,7 +220,8 @@ public partial class LabelPrintViewModel : ObservableObject
         finally
         {
             TSC.Dispose();
-            _logger.LogInformation("Print End: {OrderMid}", OrderMid);
+            _watchPrint.Stop();
+            _logger.LogInformation("Print End: {OrderMid} ({Elapsed}ms)", OrderMid, _watchPrint.ElapsedMilliseconds);
         }
 
         //PrintHistory = $"Printed: {OrderMid} on {SelectedPrinter} with {SelectedExcelConfig.Text}\n{PrintHistory}";
